@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "281857439154",
+    "project_id": "phamngocthanginfo",
+    "storage_bucket": "phamngocthanginfo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281857439154:android:5e7e62d0735a0a3ef920ab",
+        "android_client_info": {
+          "package_name": "pham.ngoc.thang.my_profile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "281857439154-bu5v9bcihqbtqs2t83lg80vme6mg3t25.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_1a2foDhgD5yX6AA26H7Jd7aHz3_PQz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "281857439154-bu5v9bcihqbtqs2t83lg80vme6mg3t25.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
