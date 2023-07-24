@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_profile/responsive.dart';
 
 import '../../../constants.dart';
@@ -16,11 +17,13 @@ class HomeBanner extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            "assets/images/bg.jpeg",
-            fit: BoxFit.cover,
-          ),
-          Container(color: darkColor.withOpacity(0.66)),
+          Lottie.asset('assets/images/animation_bg.json', fit: BoxFit.cover),
+
+          // Image.asset(
+          //       "assets/images/bg.jpeg",
+          //       fit: BoxFit.cover,
+          //     ),
+          // Container(color: darkColor.withOpacity(0.66)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Column(

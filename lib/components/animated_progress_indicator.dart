@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -73,11 +74,15 @@ class AnimatedLinearProgressIndicator extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                AutoSizeText(
                   label,
-                  style: TextStyle(color: Colors.white),
+                  minFontSize: 6,
+                  style: TextStyle(color: Colors.white, fontSize: 8),
                 ),
-                Text((value * 100).toInt().toString() + "%"),
+                AutoSizeText(
+                  (value * 100).toInt().toString() + "%",
+                  minFontSize: 6,
+                ),
               ],
             ),
             SizedBox(height: defaultPadding / 2),
