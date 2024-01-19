@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
@@ -16,13 +17,17 @@ class AreaInfoText extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: defaultPadding / 2),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title!,
-            style: const TextStyle(color: Colors.white),
+          Expanded(
+            child: AutoSizeText(
+              title!,
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
-          Text(text!),
+          const SizedBox(
+            width: 20,
+          ),
+          AutoSizeText(text!),
         ],
       ),
     );

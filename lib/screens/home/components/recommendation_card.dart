@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:my_profile/models/Recommendation.dart';
+import 'package:my_profile/models/more_info.dart';
 
 import '../../../constants.dart';
 
 class RecommendationCard extends StatelessWidget {
   const RecommendationCard({
     Key? key,
-    required this.recommendation,
+    required this.moreInfo,
   }) : super(key: key);
 
-  final Recommendation recommendation;
+  final MoreInfo moreInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +23,18 @@ class RecommendationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              recommendation.name!,
+              moreInfo.infoType ?? '',
               style: Theme.of(context)
                   .textTheme
-                  .subtitle2!
+                  .titleSmall!
                   .copyWith(color: Colors.amber),
             ),
-            Text(recommendation.source!),
-            const SizedBox(height: defaultPadding),
-            Text(
-              recommendation.text!,
-              style: const TextStyle(height: 1.5),
-            )
+            ...?moreInfo.details
+                ?.map((e) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Text('-- $e'),
+                    ))
+                .toList(),
           ],
         ),
       ),

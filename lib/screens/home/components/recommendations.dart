@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_profile/models/Recommendation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_profile/bloc/my_info_bloc.dart';
 
 import '../../../constants.dart';
 import 'recommendation_card.dart';
@@ -22,19 +23,23 @@ class AboutMe extends StatelessWidget {
                 color: Colors.white, fontWeight: FontWeight.w600, fontSize: 24),
           ),
           const SizedBox(height: defaultPadding),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(
-                demo_recommendations.length,
-                (index) => Padding(
-                  padding: const EdgeInsets.only(right: defaultPadding),
-                  child: RecommendationCard(
-                    recommendation: demo_recommendations[index],
+          BlocBuilder<MyInfoBloc, MyInfoState>(
+            builder: (context, state) {
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(
+                    state.moreInfos.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(right: defaultPadding),
+                      child: RecommendationCard(
+                        moreInfo: state.moreInfos[index],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),
