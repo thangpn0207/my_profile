@@ -31,7 +31,7 @@ class AnimatedCircularProgressIndicator extends StatelessWidget {
                   backgroundColor: darkColor,
                 ),
                 Center(
-                  child: Text(
+                  child: AutoSizeText(
                     "${(value * 100).toInt()}%",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
@@ -41,7 +41,7 @@ class AnimatedCircularProgressIndicator extends StatelessWidget {
           ),
         ),
         const SizedBox(height: defaultPadding / 2),
-        Text(
+        AutoSizeText(
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -76,8 +76,8 @@ class AnimatedLinearProgressIndicator extends StatelessWidget {
               children: [
                 AutoSizeText(
                   label,
-                  minFontSize: 6,
-                  style: const TextStyle(color: Colors.white, fontSize: 8),
+                  minFontSize: 10,
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
                 AutoSizeText(
                   "${(value * 100).toInt()}%",

@@ -1,11 +1,14 @@
-import 'dart:html' as html;
-import 'dart:html';
+import "dart:html" as html;
+import "dart:html";
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:my_profile/bloc/my_info_bloc.dart';
 import 'package:my_profile/constants.dart';
+import 'package:my_profile/utils/string_util.dart';
 
 import 'area_info_text.dart';
 import 'skills.dart';
@@ -21,108 +24,112 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: SafeArea(
-        child: Column(
-          children: [
-            const MyInfo(),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(defaultPadding),
-                child: Column(
-                  children: [
-                    const AreaInfoText(
-                      title: "Residence",
-                      text: "Viet Nam",
-                    ),
-                    const AreaInfoText(
-                      title: "City",
-                      text: "Ha Noi",
-                    ),
-                    const AreaInfoText(
-                      title: "Age",
-                      text: "23",
-                    ),
-                    const AreaInfoText(
-                      title: "Greenwich University",
-                      text: "First class",
-                    ),
-                    const Coding(),
-                    const SizedBox(height: defaultPadding),
-                    const MySkills(),
-                    const Knowledges(),
-                    const Divider(),
-                    const SizedBox(height: defaultPadding / 2),
-                    TextButton(
-                      onPressed: () {
-                        downloadFile();
-                      },
-                      child: FittedBox(
-                        child: Row(
-                          children: [
-                            Text(
-                              "DOWNLOAD CV",
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .color,
-                              ),
-                            ),
-                            const SizedBox(width: defaultPadding / 2),
-                            SvgPicture.asset("assets/icons/download.svg")
-                          ],
+      child: BlocBuilder<MyInfoBloc, MyInfoState>(
+        builder: (context, state) {
+          final userInfo = state.userInfo;
+          return SafeArea(
+            child: Column(
+              children: [
+                const MyInfo(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: Column(
+                      children: [
+                        AreaInfoText(
+                          title: "Country",
+                          text: userInfo?.country ?? "",
                         ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: defaultPadding),
-                      color: const Color(0xFF24242E),
-                      child: Row(
-                        children: [
-                          const Spacer(),
-                          IconButton(
-                            onPressed: () {
-                              _launchUrl(
-                                  'https://www.linkedin.com/in/th%E1%BA%AFng-ph%E1%BA%A1m-4ba88720a/');
-                            },
-                            icon: SvgPicture.asset("assets/icons/linkedin.svg"),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              _launchUrl('https://www.facebook.com/thangpn272');
-                            },
-                            icon: LineIcon.facebookSquare(
-                              color: Colors.grey,
+                        AreaInfoText(
+                          title: "City",
+                          text: userInfo?.city ?? "",
+                        ),
+                        AreaInfoText(
+                            title: "DOB",
+                            text: userInfo?.dob.formatStringToDOB()),
+                        AreaInfoText(
+                          title: userInfo?.university ?? '',
+                          text: userInfo?.universityRank ?? '',
+                        ),
+                        const Coding(),
+                        const SizedBox(height: defaultPadding),
+                        const MySkills(),
+                        const Knowledges(),
+                        const Divider(),
+                        const SizedBox(height: defaultPadding / 2),
+                        TextButton(
+                          onPressed: () {
+                            //downloadFile(userInfo?.cvURL ?? '');
+                            _launchUrl(userInfo?.cvURL ?? '');
+                          },
+                          child: FittedBox(
+                            child: Row(
+                              children: [
+                                Text(
+                                  "DOWNLOAD CV",
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color,
+                                  ),
+                                ),
+                                const SizedBox(width: defaultPadding / 2),
+                                SvgPicture.asset("assets/icons/download.svg")
+                              ],
                             ),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              _launchUrl("mailto:thangpn0207@gmail.com");
-                            },
-                            icon: const Icon(
-                              Icons.email_outlined,
-                              color: Colors.grey,
-                            ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: defaultPadding),
+                          color: const Color(0xFF24242E),
+                          child: Row(
+                            children: [
+                              const Spacer(),
+                              IconButton(
+                                onPressed: () {
+                                  _launchUrl(userInfo?.linkinURL ?? '');
+                                },
+                                icon: SvgPicture.asset(
+                                    "assets/icons/linkedin.svg"),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  _launchUrl(userInfo?.facebookURL ?? '');
+                                },
+                                icon: LineIcon.facebookSquare(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _launchUrl("mailto:${userInfo?.mailto}");
+                                },
+                                icon: const Icon(
+                                  Icons.email_outlined,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const Spacer(),
+                            ],
                           ),
-                          const Spacer(),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
 
-downloadFile() async {
-  final url = await FirebaseStorage.instance
-      .refFromURL("gs://phamngocthanginfo.appspot.com/Pham-Ngoc-Thang.pdf")
-      .getDownloadURL();
+downloadFile(String urlStr) async {
+  final url =
+      await FirebaseStorage.instance.refFromURL(urlStr).getDownloadURL();
   final anchor = AnchorElement(href: url)
     ..download = 'Pham-Ngoc-Thang-Flutter-CV.pdf';
   document.body?.append(anchor);
