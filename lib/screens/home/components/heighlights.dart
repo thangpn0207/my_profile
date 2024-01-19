@@ -15,11 +15,11 @@ class HighLightsInfo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: defaultPadding),
       child: Responsive.isMobileLarge(context)
-          ? Column(
+          ? const Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     HeighLight(
                       counter: AnimatedCounter(
                         value: 24,
@@ -36,10 +36,10 @@ class HighLightsInfo extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: defaultPadding),
+                SizedBox(height: defaultPadding),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     HeighLight(
                       counter: AnimatedCounter(
                         value: 6,
@@ -58,9 +58,9 @@ class HighLightsInfo extends StatelessWidget {
                 ),
               ],
             )
-          : Row(
+          : const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 HeighLight(
                   counter: AnimatedCounter(
                     value: 24,

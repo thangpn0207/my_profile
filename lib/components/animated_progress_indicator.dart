@@ -32,20 +32,20 @@ class AnimatedCircularProgressIndicator extends StatelessWidget {
                 ),
                 Center(
                   child: Text(
-                    (value * 100).toInt().toString() + "%",
-                    style: Theme.of(context).textTheme.subtitle1,
+                    "${(value * 100).toInt()}%",
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
               ],
             ),
           ),
         ),
-        SizedBox(height: defaultPadding / 2),
+        const SizedBox(height: defaultPadding / 2),
         Text(
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.subtitle2,
+          style: Theme.of(context).textTheme.titleSmall,
         ),
       ],
     );
@@ -77,15 +77,15 @@ class AnimatedLinearProgressIndicator extends StatelessWidget {
                 AutoSizeText(
                   label,
                   minFontSize: 6,
-                  style: TextStyle(color: Colors.white, fontSize: 8),
+                  style: const TextStyle(color: Colors.white, fontSize: 8),
                 ),
                 AutoSizeText(
-                  (value * 100).toInt().toString() + "%",
+                  "${(value * 100).toInt()}%",
                   minFontSize: 6,
                 ),
               ],
             ),
-            SizedBox(height: defaultPadding / 2),
+            const SizedBox(height: defaultPadding / 2),
             LinearProgressIndicator(
               value: value,
               color: primaryColor,

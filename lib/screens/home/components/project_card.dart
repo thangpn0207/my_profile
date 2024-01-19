@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_profile/models/Project.dart';
-import 'package:my_profile/responsive.dart';
 
 import '../../../constants.dart';
 
@@ -27,7 +26,7 @@ class ProjectCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle2!
+                  .titleSmall!
                   .copyWith(color: Colors.amber),
             ),
             const SizedBox(

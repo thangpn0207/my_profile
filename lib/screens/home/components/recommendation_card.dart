@@ -26,7 +26,7 @@ class RecommendationCard extends StatelessWidget {
               recommendation.name!,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle2!
+                  .titleSmall!
                   .copyWith(color: Colors.amber),
             ),
             Text(recommendation.source!),

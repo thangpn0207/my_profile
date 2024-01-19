@@ -18,11 +18,11 @@ class Coding extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: defaultPadding),
           child: Text(
             "Coding",
-            style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
-        Row(
-          children: const [
+        const Row(
+          children: [
             Expanded(
               child: AnimatedCircularProgressIndicator(
                 percentage: 0.7,

@@ -4,7 +4,7 @@ class Project {
   Project({this.title, this.description});
 }
 
-List<Project> demo_projects = [
+List<Project> demo_projects = <Project>[
   Project(
       title: "ICHECK TRACE PROJECT AT ICHECK - Flutter UI",
       description:

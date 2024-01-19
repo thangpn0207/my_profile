@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:my_profile/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'area_info_text.dart';
 import 'skills.dart';
@@ -65,7 +64,7 @@ class SideMenu extends StatelessWidget {
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyLarge!
                                     .color,
                               ),
                             ),
