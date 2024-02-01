@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_network/image_network.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
 
 class MyInfo extends StatelessWidget {
@@ -20,9 +21,21 @@ class MyInfo extends StatelessWidget {
                 const Spacer(flex: 2),
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage:
-                      NetworkImage(state.userInfo?.avatarURl ?? ''),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(300.0),
+                    child: ImageNetwork(
+                      image: state.userInfo?.avatarURl ?? '',
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
                 ),
+                // CircleAvatar(
+                //   radius: 50,
+                //   backgroundImage: NetworkImage(
+                //     state.userInfo?.avatarURl ?? '',
+                //   ),
+                // ),
                 const Spacer(),
                 Text(
                   state.userInfo?.name ?? '',

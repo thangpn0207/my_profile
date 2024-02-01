@@ -88,6 +88,13 @@ class SideMenu extends StatelessWidget {
                               const Spacer(),
                               IconButton(
                                 onPressed: () {
+                                  _launchUrl('https://github.com/thangpn0207');
+                                },
+                                icon:
+                                    SvgPicture.asset("assets/icons/github.svg"),
+                              ),
+                              IconButton(
+                                onPressed: () {
                                   _launchUrl(userInfo?.linkinURL ?? '');
                                 },
                                 icon: SvgPicture.asset(
