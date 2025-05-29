@@ -21,7 +21,7 @@ class MyInfo extends StatelessWidget {
                 CircleAvatar(
                   radius: 50,
                   backgroundImage:
-                      NetworkImage(state.userInfo?.avatarURl ?? ''),
+                      AssetImage('assets/images/avatar_cv.png'),
                 ),
                 const Spacer(),
                 Text(

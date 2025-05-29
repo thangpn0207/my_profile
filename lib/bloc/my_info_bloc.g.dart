@@ -9,6 +9,9 @@ part of 'my_info_bloc.dart';
 MyInfoState _$MyInfoStateFromJson(Map<String, dynamic> json) => MyInfoState(
       userInfo:
           json['userInfo'] == null ? null : UserInfo.fromJson(json['userInfo']),
+      loadingState:
+          $enumDecodeNullable(_$LoadingStateEnumMap, json['loadingState']) ??
+              LoadingState.initial,
       moreInfos: (json['moreInfos'] as List<dynamic>?)
               ?.map(MoreInfo.fromJson)
               .toList() ??
@@ -24,4 +27,12 @@ Map<String, dynamic> _$MyInfoStateToJson(MyInfoState instance) =>
       'userInfo': instance.userInfo,
       'moreInfos': instance.moreInfos,
       'myProjects': instance.myProjects,
+      'loadingState': _$LoadingStateEnumMap[instance.loadingState]!,
     };
+
+const _$LoadingStateEnumMap = {
+  LoadingState.initial: 'initial',
+  LoadingState.loading: 'loading',
+  LoadingState.loaded: 'loaded',
+  LoadingState.err: 'err',
+};

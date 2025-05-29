@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
-
 import 'package:my_profile/components/animated_progress_indicator.dart';
 
-import '../../../constants.dart';
+import '../../../core/app_colors.dart';
+import '../../../core/app_dimensions.dart';
+import '../../../core/app_text_styles.dart';
 
 class MySkills extends StatelessWidget {
   const MySkills({
@@ -16,59 +17,42 @@ class MySkills extends StatelessWidget {
     return BlocBuilder<MyInfoBloc, MyInfoState>(
       builder: (context, state) {
         final skills = state.userInfo?.skills;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Divider(),
+            Divider(
+              color: AppColors.divider,
+              thickness: 1,
+            ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+              padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
               child: Text(
-                "Skill",
-                style: Theme.of(context).textTheme.titleSmall,
+                "Skills",
+                style: AppTextStyles.titleMedium.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-            // const AnimatedLinearProgressIndicator(
-            //   percentage: 0.7,
-            //   label: "GIT",
-            // ),
-            // const AnimatedLinearProgressIndicator(
-            //   percentage: 0.5,
-            //   label: "ENGLISH",
-            // ),
-            // const AnimatedLinearProgressIndicator(
-            //   percentage: 0.8,
-            //   label: "COMMUNICATE",
-            // ),
-            // const AnimatedLinearProgressIndicator(
-            //   percentage: 0.7,
-            //   label: "PROBLEM SOLVING",
-            // ),
-            // const AnimatedLinearProgressIndicator(
-            //   percentage: 0.7,
-            //   label: "CRITICAL THINKING",
-            // ),
-            // const AnimatedLinearProgressIndicator(
-            //   percentage: 0.9,
-            //   label: "TEAM WORK",
-            // ),
-            // const AnimatedLinearProgressIndicator(
-            //   percentage: 0.8,
-            //   label: "READING DOCUMENT",
-            // ),
-            // const AnimatedLinearProgressIndicator(
-            //   percentage: 0.7,
-            //   label: "KNOWLEDGE ABOUT SOURCETREE",
-            // ),
-            // const AnimatedLinearProgressIndicator(
-            //   percentage: 0.5,
-            //   label: "KNOWLEDGE ABOUT POSTMAN",
-            // ),
-            ...?skills
-                ?.map((e) => AnimatedLinearProgressIndicator(
-                      percentage: e.percent ?? 0,
-                      label: e.name ?? "",
-                    ))
-                .toList(),
+            if (skills != null && skills.isNotEmpty)
+              ...skills
+                  .map((e) => AnimatedLinearProgressIndicator(
+                percentage: (e.percent ?? 0), // Convert to 0-1 range
+                label: e.name ?? "",
+              ))
+
+            else
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
+                child: Text(
+                  'No skills available',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
           ],
         );
       },

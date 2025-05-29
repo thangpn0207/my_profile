@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
 import 'package:my_profile/components/animated_progress_indicator.dart';
 
-import '../../../constants.dart';
+import '../../../core/app_colors.dart';
+import '../../../core/app_dimensions.dart';
+import '../../../core/app_text_styles.dart';
 
 class Coding extends StatelessWidget {
   const Coding({
@@ -15,56 +17,51 @@ class Coding extends StatelessWidget {
     return BlocBuilder<MyInfoBloc, MyInfoState>(
       builder: (context, state) {
         final coding = state.userInfo?.coding;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Divider(),
+            Divider(
+              color: AppColors.divider,
+              thickness: 1,
+            ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+              padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
               child: Text(
                 "Coding",
-                style: Theme.of(context).textTheme.titleSmall,
+                style: AppTextStyles.titleMedium.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-            Row(
-              children: coding
-                      ?.map((e) => Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: AnimatedCircularProgressIndicator(
-                                percentage: e.percent ?? 0,
-                                label: e.name ?? '',
-                              ),
-                            ),
-                          ))
-                      .toList() ??
-                  [],
-            ),
-            // const Row(
-            //   children: [
-            //     Expanded(
-            //       child: AnimatedCircularProgressIndicator(
-            //         percentage: 0.7,
-            //         label: "Flutter",
-            //       ),
-            //     ),
-            //     SizedBox(width: defaultPadding),
-            //     Expanded(
-            //       child: AnimatedCircularProgressIndicator(
-            //         percentage: 0.8,
-            //         label: "Dart",
-            //       ),
-            //     ),
-            //     SizedBox(width: defaultPadding),
-            //     Expanded(
-            //       child: AnimatedCircularProgressIndicator(
-            //         percentage: 0.55,
-            //         label: "Firebase",
-            //       ),
-            //     ),
-            //   ],
-            // ),
+            if (coding != null && coding.isNotEmpty)
+              Row(
+                children: coding
+                    .map((e) => Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppDimensions.paddingS,
+                    ),
+                    child: AnimatedCircularProgressIndicator(
+                      percentage: (e.percent ?? 0),
+                      label: e.name ?? '',
+                    ),
+                  ),
+                ))
+                    .toList(),
+              )
+            else
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
+                child: Text(
+                  'No coding skills available',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
           ],
         );
       },

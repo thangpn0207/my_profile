@@ -1,9 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_profile/responsive.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../../constants.dart';
+import '../../../core/app_colors.dart';
+import '../../../core/app_dimensions.dart';
+import '../../../core/app_text_styles.dart';
 
 class HomeBanner extends StatelessWidget {
   const HomeBanner({
@@ -12,53 +14,49 @@ class HomeBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
+
     return AspectRatio(
-      aspectRatio: Responsive.isMobile(context) ? 2.5 : 3,
+      aspectRatio: isMobile ? 2.5 : 3,
       child: Stack(
         fit: StackFit.expand,
         children: [
           Lottie.asset('assets/images/animation_bg.json', fit: BoxFit.cover),
-
-          // Image.asset(
-          //       "assets/images/bg.jpeg",
-          //       fit: BoxFit.cover,
-          //     ),
-          // Container(color: darkColor.withOpacity(0.66)),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+            padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Discover my infomation!",
-                  style: Responsive.isDesktop(context)
-                      ? Theme.of(context).textTheme.displaySmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          )
-                      : Theme.of(context).textTheme.headlineSmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                  "Discover my information!",
+                  style: isDesktop
+                      ? AppTextStyles.displaySmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  )
+                      : AppTextStyles.headlineSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
-                if (Responsive.isMobileLarge(context))
-                  const SizedBox(height: defaultPadding / 2),
+                if (isMobile) SizedBox(height: AppDimensions.paddingS),
                 const MyBuildAnimatedText(),
-                const SizedBox(height: defaultPadding),
-                // if (!Responsive.isMobileLarge(context))
+                SizedBox(height: AppDimensions.paddingM),
+                // Uncomment if you want to add the button back
+                // if (!isMobile)
                 //   ElevatedButton(
                 //     onPressed: () {},
-                //     style: TextButton.styleFrom(
-                //       padding: const EdgeInsets.symmetric(
-                //           horizontal: defaultPadding * 2,
-                //           vertical: defaultPadding),
-                //       backgroundColor: primaryColor,
+                //     style: ElevatedButton.styleFrom(
+                //       padding: EdgeInsets.symmetric(
+                //         horizontal: AppDimensions.paddingXL,
+                //         vertical: AppDimensions.paddingM,
+                //       ),
+                //       backgroundColor: AppColors.primary,
+                //       foregroundColor: AppColors.surfaceDark,
                 //     ),
-                //     child: const Text(
-                //       "EXPLORE NOW",
-                //       style: TextStyle(color: darkColor),
-                //     ),
+                //     child: const Text("EXPLORE NOW"),
                 //   ),
               ],
             ),
@@ -76,22 +74,23 @@ class MyBuildAnimatedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
+    final showFlutterText = !isMobile && !isTablet;
+
     return DefaultTextStyle(
-      // it applies same style to all the widgets under it
-      style: Theme.of(context).textTheme.titleMedium!,
+      style: AppTextStyles.titleMedium,
       maxLines: 1,
       child: Row(
         children: [
-          if (!Responsive.isMobileLarge(context)) const FlutterCodedText(),
-          if (!Responsive.isMobileLarge(context))
-            const SizedBox(width: defaultPadding / 2),
+          if (showFlutterText) const FlutterCodedText(),
+          if (showFlutterText) SizedBox(width: AppDimensions.paddingS),
           const Text("I build "),
-          Responsive.isMobile(context)
+          isMobile
               ? const Expanded(child: AnimatedText())
               : const AnimatedText(),
-          if (!Responsive.isMobileLarge(context))
-            const SizedBox(width: defaultPadding / 2),
-          if (!Responsive.isMobileLarge(context)) const FlutterCodedText(),
+          if (showFlutterText) SizedBox(width: AppDimensions.paddingS),
+          if (showFlutterText) const FlutterCodedText(),
         ],
       ),
     );
@@ -109,9 +108,12 @@ class AnimatedText extends StatelessWidget {
       animatedTexts: [
         TyperAnimatedText(
           "responsive web and mobile app with flutter",
-          speed: const Duration(milliseconds: 60),
+          speed: Duration(milliseconds: AppDimensions.animationFast ~/ 3),
+          textStyle: AppTextStyles.titleMedium,
         ),
       ],
+      repeatForever: true,
+      pause: const Duration(seconds: 1),
     );
   }
 }
@@ -123,15 +125,18 @@ class FlutterCodedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text.rich(
+    return Text.rich(
       TextSpan(
         text: "<",
+        style: AppTextStyles.titleMedium,
         children: [
           TextSpan(
             text: "flutter",
-            style: TextStyle(color: primaryColor),
+            style: AppTextStyles.titleMedium.copyWith(
+              color: AppColors.primary,
+            ),
           ),
-          TextSpan(text: ">"),
+          const TextSpan(text: ">"),
         ],
       ),
     );

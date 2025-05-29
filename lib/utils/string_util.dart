@@ -24,6 +24,6 @@ extension ExtString on String? {
       return 0;
     }
     final days = converted.difference(DateTime.now()).inDays;
-    return (days ~/ 30).abs();
+    return (days ~/ 365).abs();
   }
 }

@@ -1,14 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import '../core/app_colors.dart';
+import '../core/app_dimensions.dart';
+import '../core/app_text_styles.dart';
 
 class AnimatedCircularProgressIndicator extends StatelessWidget {
   const AnimatedCircularProgressIndicator({
-    Key? key,
+    super.key,
     required this.percentage,
     required this.label,
-  }) : super(key: key);
+  });
 
   final double percentage;
   final String label;
@@ -21,31 +23,34 @@ class AnimatedCircularProgressIndicator extends StatelessWidget {
           aspectRatio: 1,
           child: TweenAnimationBuilder(
             tween: Tween<double>(begin: 0, end: percentage),
-            duration: defaultDuration,
+            duration: Duration(milliseconds: AppDimensions.animationSlowHigh),
             builder: (context, double value, child) => Stack(
               fit: StackFit.expand,
               children: [
                 CircularProgressIndicator(
                   value: value,
-                  color: primaryColor,
-                  backgroundColor: darkColor,
+                  color: AppColors.primary,
+                  backgroundColor: AppColors.surfaceDark,
+                  strokeWidth: 4,
                 ),
                 Center(
                   child: AutoSizeText(
                     "${(value * 100).toInt()}%",
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: AppTextStyles.bodySmall,
+                    minFontSize: 12,
                   ),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(height: defaultPadding / 2),
+        SizedBox(height: AppDimensions.paddingS),
         AutoSizeText(
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.titleSmall,
+          style: AppTextStyles.bodySmall,
+          minFontSize: 8,
         ),
       ],
     );
@@ -54,10 +59,10 @@ class AnimatedCircularProgressIndicator extends StatelessWidget {
 
 class AnimatedLinearProgressIndicator extends StatelessWidget {
   const AnimatedLinearProgressIndicator({
-    Key? key,
+    super.key,
     required this.percentage,
     required this.label,
-  }) : super(key: key);
+  });
 
   final double percentage;
   final String label;
@@ -65,31 +70,40 @@ class AnimatedLinearProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: defaultPadding),
+      padding: EdgeInsets.only(bottom: AppDimensions.paddingM),
       child: TweenAnimationBuilder(
         tween: Tween<double>(begin: 0, end: percentage),
-        duration: defaultDuration,
+        duration: Duration(milliseconds: AppDimensions.animationSlow),
         builder: (context, double value, child) => Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AutoSizeText(
-                  label,
-                  minFontSize: 10,
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                Expanded(
+                  child: AutoSizeText(
+                    label,
+                    minFontSize: 10,
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
+                SizedBox(width: AppDimensions.paddingS),
                 AutoSizeText(
                   "${(value * 100).toInt()}%",
-                  minFontSize: 6,
+                  minFontSize: 10,
+                  style: AppTextStyles.caption,
                 ),
               ],
             ),
-            const SizedBox(height: defaultPadding / 2),
+            SizedBox(height: AppDimensions.paddingS),
             LinearProgressIndicator(
               value: value,
-              color: primaryColor,
-              backgroundColor: darkColor,
+              color: AppColors.primary,
+              backgroundColor: AppColors.surfaceDark,
+              minHeight: 4,
             ),
           ],
         ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../constants.dart';
+import 'package:my_profile/core/app_dimensions.dart';
 
 class AnimatedCounter extends StatelessWidget {
   const AnimatedCounter({
@@ -16,15 +15,14 @@ class AnimatedCounter extends StatelessWidget {
   Widget build(BuildContext context) {
     return TweenAnimationBuilder(
       tween: IntTween(begin: 0, end: value),
-      duration: defaultDuration,
+      duration: Duration(milliseconds: AppDimensions.animationSlowHigh),
       builder: (context, value, child) => Column(
         children: [
           Text(
             "$value$text",
             style: Theme.of(context)
                 .textTheme
-                .headlineMedium!
-                .copyWith(color: primaryColor),
+                .headlineMedium,
           ),
         ],
       ),
