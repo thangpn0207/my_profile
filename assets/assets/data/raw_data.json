@@ -1,0 +1,388 @@
+{
+  "UserInfoModal": {
+    "id": "user_id_thangpn0207",
+    "userName": "thangpn0207",
+    "name": "Phạm Ngọc Thắng",
+    "role": "Full Stack Engineer",
+    "avatarURL": "",
+    "dob": "2000-07-02T08:00:00Z",
+    "exp": "2020-12-01T08:00:00Z",
+    "city": "Hà Nội",
+    "country": "Vietnam",
+    "university": "Greenwich University",
+    "universityRank": "First Class",
+    "coding": [
+      {
+        "percent": 0.9,
+        "name": "Flutter"
+      },
+      {
+        "percent": 0.85,
+        "name": "ReactJs"
+      },
+      {
+        "percent": 0.8,
+        "name": "Golang"
+      },
+      {
+        "percent": 0.8,
+        "name": "Java Spring Boot"
+      },
+      {
+        "percent": 0.7,
+        "name": "Dart"
+      }
+    ],
+    "skills": [
+      {
+        "percent": 0.9,
+        "name": "Problem Solving"
+      },
+      {
+        "percent": 0.9,
+        "name": "Team Work"
+      },
+      {
+        "percent": 0.9,
+        "name": "Communication"
+      },
+      {
+        "percent": 0.9,
+        "name": "Leadership"
+      }
+    ],
+    "knowledge": [
+      {
+        "percent": 0.8,
+        "name": "Logical Thinking"
+      },
+      {
+        "percent": 0.8,
+        "name": "Object-Oriented Programming"
+      },
+      {
+        "percent": 0.8,
+        "name": "Analyzing Customer Requirements"
+      },
+      {
+        "percent": 0.8,
+        "name": "New Technological Knowledge"
+      },
+      {
+        "percent": 0.8,
+        "name": "Domain Expertise Development"
+      }
+    ],
+    "cvURL": "",
+    "facebookURL": "https://www.facebook.com/thangpn272",
+    "linkinURL": "https://www.linkedin.com/in/thắng-phạm-4ba88720α",
+    "githubURL": "https://github.com/thangpn0207",
+    "mailto": "thangpn0207@gmail.com",
+    "phone": "0366946114"
+  },
+  "MyProjectModel": [
+    {
+      "id": "project_tastech_flutter_engineer",
+      "userName": "thangpn0207",
+      "name": "Tastech-Asia Product Applications",
+      "company": "Tastech-Asia",
+      "role": "Flutter Engineer",
+      "techUsed": ["Flutter", "ReactJs", "Golang", "Java"],
+      "dependencies": ["TAILWIND", "MONGODB", "SPRING BOOT"],
+      "tasks": [
+        "Developed mobile apps using Flutter",
+        "Configured flavors and optimized performance",
+        "Collaborated on new features, quality, and UX",
+        "Developed websites using ReactJS with Tailwind",
+        "Developed backend using Golang with MongoDB",
+        "Developed backend using Java Spring Boot",
+        "Applied Agile/Scrum for project management",
+        "Participated in daily stand-ups, sprint planning, reviews, retrospectives"
+      ],
+      "startTime": "04/2023",
+      "endTime": null
+    },
+    {
+      "id": "project_its_flutter_developer",
+      "userName": "thangpn0207",
+      "name": "ITS-Solution Projects (4 projects)",
+      "company": "ITS-Solution",
+      "role": "Flutter Developer",
+      "techUsed": ["Flutter"],
+      "dependencies": [
+        "BLOC",
+        "DIO",
+        "RETROFIT",
+        "FIREBASE",
+        "SNS",
+        "GOOGLE MAPS SDK",
+        "GOOGLE MAPS API"
+      ],
+      "tasks": [
+        "Implemented BLoC, Dio, Retrofit for Flutter apps",
+        "Utilized RESTful API communication",
+        "Implemented Push Notification via Firebase",
+        "Configured SNS for social logins (Google, Facebook, Twitter)",
+        "Utilized Google Maps services",
+        "Participated in multiple projects maintaining high quality",
+        "Identified and fixed bugs",
+        "Uploaded and published apps to app stores",
+        "Assigned tasks to team members"
+      ],
+      "startTime": "07/2021",
+      "endTime": "04/2023"
+    },
+    {
+      "id": "project_icheck_flutter_developer",
+      "userName": "thangpn0207",
+      "name": "Icheck Product Apps (2 projects)",
+      "company": "Icheck",
+      "role": "Flutter Developer (Intern/Fresher)",
+      "techUsed": ["Flutter"],
+      "dependencies": [],
+      "tasks": [
+        "Collaborated on design implementation",
+        "Developed login and user info screens",
+        "Fixed issues identified by testers",
+        "Continuously learned and grew Flutter skills"
+      ],
+      "startTime": "12/2020",
+      "endTime": "07/2021"
+    },
+    {
+      "id": "project_plantour",
+      "userName": "thangpn0207",
+      "name": "PlanTour",
+      "company": "TasTech-Asia",
+      "role": "Full-stack developer",
+      "techUsed": ["ReactJs", "Java"],
+      "dependencies": ["SPRING BOOT", "TAILWIND"],
+      "tasks": ["Convert designs to ReactJs code", "Build Java APIs for clients"],
+      "startTime": "08/2024",
+      "endTime": null
+    },
+    {
+      "id": "project_yummix",
+      "userName": "thangpn0207",
+      "name": "YummiX",
+      "company": "TasTech-Asia",
+      "role": "Full-stack developer",
+      "techUsed": ["ReactJs", "Java"],
+      "dependencies": ["SPRING BOOT", "ANT DESIGN"],
+      "tasks": [
+        "Convert designs to ReactJs code",
+        "Build Java APIs for client use"
+      ],
+      "startTime": "03/2024",
+      "endTime": "12/2024"
+    },
+    {
+      "id": "project_recago",
+      "userName": "thangpn0207",
+      "name": "Recago",
+      "company": "TasTech-Asia",
+      "role": "Full-stack developer",
+      "techUsed": ["Flutter", "Golang"],
+      "dependencies": [
+        "DIO",
+        "GOOGLE MAP",
+        "MAPBOX",
+        "GETIT",
+        "FIREBASE NOTIFICATION",
+        "FIREBASE DEEPLINK",
+        "RABBITMQ"
+      ],
+      "tasks": [
+        "Convert designs to Flutter code",
+        "Build Golang APIs for client use"
+      ],
+      "startTime": "06/2023",
+      "endTime": "03/2024"
+    },
+    {
+      "id": "project_shorin_8_app",
+      "userName": "thangpn0207",
+      "name": "Shorin (8 app)",
+      "company": "AtaraxiaDX",
+      "role": "Freelancer",
+      "techUsed": ["Flutter"],
+      "dependencies": ["GETX"],
+      "tasks": [
+        "Fixed bugs",
+        "Improved performance",
+        "Developed new features",
+        "Uploaded application to Store"
+      ],
+      "startTime": "09/2023",
+      "endTime": "12/2023"
+    },
+    {
+      "id": "project_xtrip",
+      "userName": "thangpn0207",
+      "name": "Xtrip",
+      "company": "TasTech-Asia",
+      "role": "Flutter developer",
+      "techUsed": ["Flutter"],
+      "dependencies": [
+        "BLOC",
+        "DIO",
+        "FIREBASE NOTIFICATION",
+        "GOOGLE LOGIN",
+        "FIREBASE DEEPLINK",
+        "GOOGLE MAP"
+      ],
+      "tasks": ["Fixed bugs", "Improved performance", "Developed new features"],
+      "startTime": "04/2023",
+      "endTime": "03/2024"
+    },
+    {
+      "id": "project_airwater",
+      "userName": "thangpn0207",
+      "name": "AirWater",
+      "company": "ITS-Global",
+      "role": "Lead-Flutter team",
+      "techUsed": ["Flutter"],
+      "dependencies": [
+        "BLOC",
+        "DIO",
+        "RETROFIT",
+        "FIREBASE AUTH",
+        "FIREBASE NOTIFICATION",
+        "FIREBASE DEEPLINK",
+        "FACEBOOK LOGIN",
+        "GOOGLE LOGIN",
+        "GOOGLE MAP API"
+      ],
+      "tasks": [
+        "Converted designs to Flutter code",
+        "Set up project base code",
+        "Managed and assigned tasks",
+        "Reviewed new code",
+        "Built and released app for testers and clients",
+        "Uploaded application to Store"
+      ],
+      "startTime": "11/2022",
+      "endTime": "04/2023"
+    },
+    {
+      "id": "project_sototabe",
+      "userName": "thangpn0207",
+      "name": "Sototabe",
+      "company": "ITS-Global",
+      "role": "Flutter developer",
+      "techUsed": ["Flutter"],
+      "dependencies": [
+        "PROVIDER",
+        "HTTPS",
+        "FIREBASE AUTH",
+        "FIREBASE NOTIFICATION",
+        "FIREBASE DEEPLINK",
+        "FACEBOOK LOGIN",
+        "GOOGLE LOGIN",
+        "TWITTER LOGIN"
+      ],
+      "tasks": ["Fixed bugs", "Improved performance", "Developed new features"],
+      "startTime": "08/2022",
+      "endTime": "11/2022"
+    },
+    {
+      "id": "project_box_app",
+      "userName": "thangpn0207",
+      "name": "Box-App",
+      "company": "ITS-Global",
+      "role": "Lead-Flutter team",
+      "techUsed": ["Flutter"],
+      "dependencies": [
+        "BLOC",
+        "DIO",
+        "RETROFIT",
+        "GETIT",
+        "FIREBASE AUTH",
+        "FIREBASE NOTIFICATION",
+        "FIREBASE DEEPLINK",
+        "FACEBOOK LOGIN",
+        "GOOGLE LOGIN"
+      ],
+      "tasks": [
+        "Converted designs to Flutter code",
+        "Set up project base code",
+        "Managed and assigned tasks",
+        "Reviewed new code",
+        "Built and released app"
+      ],
+      "startTime": "03/2022",
+      "endTime": "11/2022"
+    },
+    {
+      "id": "project_cotami",
+      "userName": "thangpn0207",
+      "name": "Cotami",
+      "company": "ITS-Global",
+      "role": "Flutter developer",
+      "techUsed": ["Flutter"],
+      "dependencies": [
+        "BLOC",
+        "DIO",
+        "GETIT",
+        "FIREBASE AUTH",
+        "FIREBASE NOTIFICATION",
+        "FIREBASE DEEPLINK",
+        "FIREBASE HOSTING"
+      ],
+      "tasks": [
+        "Implemented UI/UX design",
+        "Configured backend error handling",
+        "Created embedded web version",
+        "Fixed bugs"
+      ],
+      "startTime": "07/2021",
+      "endTime": "03/2022"
+    },
+    {
+      "id": "project_business_center",
+      "userName": "thangpn0207",
+      "name": "Business Center Project",
+      "company": "ICheck",
+      "role": "Flutter developer",
+      "techUsed": ["Flutter"],
+      "dependencies": ["BLOC", "HTTPS", "GETIT"],
+      "tasks": [
+        "Converted designs for login/myprofile screens",
+        "Fixed bugs in mobile application"
+      ],
+      "startTime": "05/2021",
+      "endTime": "07/2021"
+    },
+    {
+      "id": "project_icheck_trace",
+      "userName": "thangpn0207",
+      "name": "Icheck Trace Project",
+      "company": "ICheck",
+      "role": "Flutter developer",
+      "techUsed": ["Flutter"],
+      "dependencies": ["BLOC", "HTTPS", "GETIT"],
+      "tasks": [
+        "Converted designs for login/register/myprofile screens",
+        "Fixed bugs in mobile application"
+      ],
+      "startTime": "12/2020",
+      "endTime": "07/2021"
+    }
+  ],
+  "MoreInfoModel": {
+    "id": "moreinfo_id_thangpn0207",
+    "userName": "thangpn0207",
+    "infoType": "About Me & Personal Attributes",
+    "details": [
+      "Solution provider for app development clients.",
+      "Ambitious individual eager to learn new technological knowledge.",
+      "Aspires to join technology teams with a shared mindset for mutual benefit.",
+      "Seeks full-stack engineer positions where contributions are recognized and rewarded.",
+      "Ready to take on multiple projects and continuously learn new technologies.",
+      "Values communication with clients to enhance business and personal expertise.",
+      "Aims to thrive in international environments and independently manage projects.",
+      "Short-term goal: Deepen domain expertise and work in international professional settings.",
+      "Long-term goal: Build and lead a team to develop projects with innovative technologies."
+    ]
+  }
+}
