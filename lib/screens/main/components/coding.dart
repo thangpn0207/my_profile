@@ -7,8 +7,8 @@ import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
 import '../../../core/app_text_styles.dart';
 
-class Coding extends StatelessWidget {
-  const Coding({
+class CodingWidget extends StatelessWidget {
+  const CodingWidget({
     Key? key,
   }) : super(key: key);
 

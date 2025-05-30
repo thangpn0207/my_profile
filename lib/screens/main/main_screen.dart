@@ -1,6 +1,7 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gif/gif.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -10,7 +11,7 @@ import '../../core/app_text_styles.dart';
 import 'components/side_menu.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key, required this.children}) : super(key: key);
+  const MainScreen({super.key, required this.children});
 
   final List<Widget> children;
 
@@ -34,28 +35,33 @@ class MainScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: SizedBox.expand(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Gif(
-                height: 100,
-                width: 100,
-                fit: BoxFit.cover,
-                autostart: Autostart.loop,
-                placeholder: (context) => CircularProgressIndicator(
-                  color: AppColors.primary,
-                  strokeWidth: 3,
+          child: SizedBox(
+            width: 1500,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextLiquidFill(
+                  text: 'Welcome to my profile',
+                  waveColor: AppColors.primaryDark,
+                  boxBackgroundColor: AppColors.background,
+                  loadDuration: Duration(seconds: 3),
+                  waveDuration: Duration(seconds: 2),
+                  textStyle: AppTextStyles.displayLarge.copyWith(fontSize: 80),
+                  boxHeight: 300.0,
+                  boxWidth: 1500,
                 ),
-                image: const AssetImage('assets/gifs/loading.gif'),
-              ),
-              SizedBox(height: AppDimensions.paddingL),
-              Text(
-                'Loading...',
-                style: AppTextStyles.bodyLarge.copyWith(
-                  color: AppColors.textSecondary,
+                DefaultTextStyle(
+                  style: GoogleFonts.imperialScript()
+                      .copyWith(color: AppColors.primaryDark, fontSize: 50),
+                  child: AnimatedTextKit(
+                    pause: Duration(seconds: 3),
+                    animatedTexts: [
+                      TyperAnimatedText('Phạm Ngọc Thắng'),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -144,7 +150,7 @@ class MainScreen extends StatelessWidget {
       drawer: const SideMenu(),
       body: Center(
         child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: AppDimensions.paddingS),
+          padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingS),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

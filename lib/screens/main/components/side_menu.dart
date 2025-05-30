@@ -9,11 +9,12 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
 import '../../../core/app_text_styles.dart';
+import '../../../models/user_info.dart';
 import 'area_info_text.dart';
-import 'skills.dart';
+import 'coding.dart';
 import 'knowledges.dart';
 import 'my_info.dart';
-import 'coding.dart';
+import 'skills.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -52,10 +53,10 @@ class SideMenu extends StatelessWidget {
                           title: userInfo?.university ?? '',
                           text: userInfo?.universityRank ?? '',
                         ),
-                        const Coding(),
+                        const CodingWidget(),
                         SizedBox(height: AppDimensions.paddingM),
                         const MySkills(),
-                        const Knowledges(),
+                        const KnowledgesWidget(),
                         Divider(
                           color: AppColors.divider,
                           thickness: 1,
@@ -116,7 +117,7 @@ class SideMenu extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialMediaSection(BuildContext context, dynamic userInfo) {
+  Widget _buildSocialMediaSection(BuildContext context, UserInfo? userInfo) {
     return Container(
       margin: EdgeInsets.only(top: AppDimensions.paddingM),
       padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingS),
@@ -156,6 +157,19 @@ class SideMenu extends StatelessWidget {
               size: AppDimensions.iconM,
             ),
             tooltip: 'Email',
+          ),
+          _buildSocialButton(
+            onPressed: () => _launchUrl(userInfo?.githubURL ?? ""),
+            icon: SvgPicture.asset(
+              "assets/icons/github.svg",
+              width: AppDimensions.iconM,
+              height: AppDimensions.iconM,
+              colorFilter: ColorFilter.mode(
+                AppColors.textSecondary,
+                BlendMode.srcIn,
+              ),
+            ),
+            tooltip: 'GitHub',
           ),
         ],
       ),

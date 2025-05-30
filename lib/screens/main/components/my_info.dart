@@ -4,8 +4,8 @@ import 'package:my_profile/bloc/my_info_bloc.dart';
 
 class MyInfo extends StatelessWidget {
   const MyInfo({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,7 @@ class MyInfo extends StatelessWidget {
                 const Spacer(flex: 2),
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage:
-                      AssetImage('assets/images/avatar_cv.png'),
+                  backgroundImage: AssetImage('assets/images/avatar_cv.png'),
                 ),
                 const Spacer(),
                 Text(

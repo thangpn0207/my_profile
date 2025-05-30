@@ -9,8 +9,8 @@ import '../../../core/app_text_styles.dart';
 
 class MySkills extends StatelessWidget {
   const MySkills({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +36,10 @@ class MySkills extends StatelessWidget {
               ),
             ),
             if (skills != null && skills.isNotEmpty)
-              ...skills
-                  .map((e) => AnimatedLinearProgressIndicator(
-                percentage: (e.percent ?? 0), // Convert to 0-1 range
-                label: e.name ?? "",
-              ))
-
+              ...skills.map((e) => AnimatedLinearProgressIndicator(
+                    percentage: (e.percent ?? 0), // Convert to 0-1 range
+                    label: e.name ?? "",
+                  ))
             else
               Padding(
                 padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),

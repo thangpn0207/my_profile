@@ -8,10 +8,10 @@ import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
 import '../../../core/app_text_styles.dart';
 
-class Knowledges extends StatelessWidget {
-  const Knowledges({
-    Key? key,
-  }) : super(key: key);
+class KnowledgesWidget extends StatelessWidget {
+  const KnowledgesWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +37,9 @@ class Knowledges extends StatelessWidget {
               ),
             ),
             if (knowledges != null && knowledges.isNotEmpty)
-              ...knowledges
-                  .map((e) => KnowledgeText(
-                text: e.name ?? '',
-              ))
-                  .toList()
+              ...knowledges.map((e) => KnowledgeText(
+                    text: e.name ?? '',
+                  ))
             else
               Padding(
                 padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
