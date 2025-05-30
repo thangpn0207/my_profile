@@ -159,7 +159,7 @@
       "dependencies": ["SPRING BOOT", "TAILWIND"],
       "tasks": ["Convert designs to ReactJs code", "Build Java APIs for clients"],
       "startTime": "08/2024",
-      "endTime": null
+      "endTime": "04/2025"
     },
     {
       "id": "project_yummix",
