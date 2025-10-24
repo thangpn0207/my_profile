@@ -15,7 +15,6 @@ class HomeBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
-    final isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
 
     return AspectRatio(
       aspectRatio: isMobile ? 2.5 : 3,
@@ -25,42 +24,102 @@ class HomeBanner extends StatelessWidget {
           Lottie.asset('assets/images/animation_bg.json', fit: BoxFit.cover),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingM),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Discover my information!",
-                  style: isDesktop
-                      ? AppTextStyles.displaySmall.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            child: isMobile
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 56,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 52,
+                          backgroundImage:
+                              AssetImage('assets/images/avatar_cv.png'),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        // Add drop shadow
+                        foregroundImage: null,
+                      ),
+                      SizedBox(height: AppDimensions.paddingM),
+                      Text(
+                        "Pham Ngoc Thang",
+                        style: AppTextStyles.displaySmall.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: AppDimensions.paddingS),
+                      Text(
+                        "Flutter Developer | UI/UX Enthusiast",
+                        style: AppTextStyles.headlineSmall.copyWith(
+                          color: Colors.white70,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: AppDimensions.paddingM),
+                      const MyBuildAnimatedText(),
+                      SizedBox(height: AppDimensions.paddingM),
+                      // Removed action buttons to prevent mobile UI breaking
+                    ],
                   )
-                      : AppTextStyles.headlineSmall.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Avatar with drop shadow
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 16,
+                              offset: Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 72,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: 68,
+                            backgroundImage:
+                                AssetImage('assets/images/avatar_cv.png'),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: AppDimensions.paddingXXL),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Pham Ngoc Thang",
+                              style: AppTextStyles.displayMedium.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: AppDimensions.paddingS),
+                            Text(
+                              "Flutter Developer | UI/UX Enthusiast",
+                              style: AppTextStyles.headlineMedium.copyWith(
+                                color: Colors.white70,
+                              ),
+                            ),
+                            SizedBox(height: AppDimensions.paddingM),
+                            const MyBuildAnimatedText(),
+                            SizedBox(height: AppDimensions.paddingL),
+                            // Removed action buttons to prevent mobile UI breaking
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                if (isMobile) SizedBox(height: AppDimensions.paddingS),
-                const MyBuildAnimatedText(),
-                SizedBox(height: AppDimensions.paddingM),
-                // Uncomment if you want to add the button back
-                // if (!isMobile)
-                //   ElevatedButton(
-                //     onPressed: () {},
-                //     style: ElevatedButton.styleFrom(
-                //       padding: EdgeInsets.symmetric(
-                //         horizontal: AppDimensions.paddingXL,
-                //         vertical: AppDimensions.paddingM,
-                //       ),
-                //       backgroundColor: AppColors.primary,
-                //       foregroundColor: AppColors.surfaceDark,
-                //     ),
-                //     child: const Text("EXPLORE NOW"),
-                //   ),
-              ],
-            ),
-          )
+          ),
         ],
       ),
     );
