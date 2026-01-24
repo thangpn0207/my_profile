@@ -1,9 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/app_colors.dart';
-import '../../../core/app_dimensions.dart';
-import '../../../core/app_text_styles.dart';
 
 class AreaInfoText extends StatelessWidget {
   const AreaInfoText({
@@ -17,33 +16,35 @@ class AreaInfoText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: AppDimensions.paddingS),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             flex: 2,
             child: AutoSizeText(
-              title ?? '',
-              style: AppTextStyles.bodyMedium.copyWith(
+              "${title?.toUpperCase() ?? ''}:",
+              style: GoogleFonts.shareTechMono(
                 color: AppColors.textPrimary,
-                fontWeight: FontWeight.w500,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
               ),
-              minFontSize: 12,
-              maxLines: 2,
+              minFontSize: 10,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          SizedBox(width: AppDimensions.paddingM),
+          const SizedBox(width: 8),
           Expanded(
             flex: 3,
             child: AutoSizeText(
               text ?? '',
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondary,
+              style: GoogleFonts.shareTechMono(
+                color: AppColors.primary.withValues(alpha: 0.8),
+                fontSize: 12,
               ),
-              minFontSize: 12,
-              maxLines: 3,
+              minFontSize: 10,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.end,
             ),

@@ -1,326 +1,205 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_profile/components/glass_tech_card.dart';
 import 'package:my_profile/models/my_project.dart';
+import 'package:my_profile/screens/home/components/project_details_dialog.dart';
 
 import '../../../core/app_colors.dart';
-import '../../../core/app_dimensions.dart';
-import '../../../core/app_text_styles.dart';
 
 class ProjectCard extends StatefulWidget {
   const ProjectCard({
-    Key? key,
+    super.key,
     required this.project,
-  }) : super(key: key);
+    this.allProjects = const [],
+    this.index = 0,
+  });
 
   final MyProject project;
+  final List<MyProject> allProjects;
+  final int index;
 
   @override
   State<ProjectCard> createState() => _ProjectCardState();
 }
 
-class _ProjectCardState extends State<ProjectCard>
-    with SingleTickerProviderStateMixin {
-  bool _isExpanded = false;
-  late AnimationController _animationController;
-  late Animation<double> _rotationAnimation;
+class _ProjectCardState extends State<ProjectCard> {
+  bool _isHovered = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: Duration(milliseconds: AppDimensions.animationNormal),
-      vsync: this,
-    );
-    _rotationAnimation = Tween<double>(
-      begin: 0.0,
-      end: 0.5,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void _toggleExpanded() {
-    setState(() {
-      _isExpanded = !_isExpanded;
-    });
-    if (_isExpanded) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(AppDimensions.paddingM),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: AppDimensions.elevationS,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _ItemTitle(
-              title: widget.project.name ?? '',
-              time: '${widget.project.startTime}-${widget.project.endTime}',
-            ),
-            SizedBox(height: AppDimensions.paddingS),
-            _ItemInfo(
-              title: 'Company',
-              info: widget.project.company ?? "",
-            ),
-            SizedBox(height: AppDimensions.paddingXS),
-            _ItemInfo(
-              title: 'Role',
-              info: widget.project.role ?? "",
-            ),
-            SizedBox(height: AppDimensions.paddingXS),
-            _ItemInfoList(
-              title: 'Tech used',
-              moreInfo: widget.project.techUsed ?? [],
-              isExpanded: _isExpanded,
-            ),
-            SizedBox(height: AppDimensions.paddingXS),
-            _ItemInfoList(
-              title: 'Dependencies',
-              moreInfo: widget.project.dependencies ?? [],
-              isExpanded: _isExpanded,
-            ),
-            SizedBox(height: AppDimensions.paddingXS),
-            _ItemInfoList(
-              title: 'Tasks',
-              moreInfo: widget.project.tasks ?? [],
-              isExpanded: _isExpanded,
-            ),
-            SizedBox(height: AppDimensions.paddingS),
-            _buildSeeMoreButton(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSeeMoreButton() {
-    final hasExpandableContent = (widget.project.techUsed?.length ?? 0) > 3 ||
-        (widget.project.dependencies?.length ?? 0) > 3 ||
-        (widget.project.tasks?.length ?? 0) > 3;
-
-    if (!hasExpandableContent) {
-      return const SizedBox.shrink();
-    }
-
-    return Center(
-      child: AnimatedBuilder(
-        animation: _rotationAnimation,
-        builder: (context, child) {
-          return Transform.rotate(
-            angle: _rotationAnimation.value * 3.14159,
-            child: TextButton(
-              onPressed: _toggleExpanded,
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppDimensions.paddingM,
-                  vertical: AppDimensions.paddingS,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusM),
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    color: AppColors.primary,
-                    size: AppDimensions.iconM,
-                  ),
-                  SizedBox(width: AppDimensions.paddingS),
-                  Flexible(
-                    child: Text(
-                      _isExpanded ? "See Less" : "See More",
-                      style: AppTextStyles.labelMedium.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
+  void _showProjectDetails() {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: true,
+        barrierColor: Colors.black.withValues(alpha: 0.9),
+        transitionDuration: const Duration(milliseconds: 600),
+        reverseTransitionDuration: const Duration(milliseconds: 400),
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return ProjectStackDialog(
+            projects: widget.allProjects.isNotEmpty
+                ? widget.allProjects
+                : [widget.project],
+            initialIndex: widget.index,
+          );
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final curve =
+              CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic);
+          return FadeTransition(
+            opacity: curve,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.9, end: 1.0).animate(curve),
+              child: child,
             ),
           );
         },
       ),
     );
   }
-}
-
-class _ItemTitle extends StatelessWidget {
-  const _ItemTitle({
-    Key? key,
-    required this.title,
-    required this.time,
-  }) : super(key: key);
-
-  final String title;
-  final String time;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AutoSizeText(
-          title,
-          style: AppTextStyles.titleMedium.copyWith(
-            color: AppColors.primary,
-            fontWeight: FontWeight.w600,
-          ),
-          maxLines: 2,
-          minFontSize: 12,
-          overflow: TextOverflow.ellipsis,
-        ),
-        SizedBox(height: AppDimensions.paddingXS),
-        AutoSizeText(
-          time,
-          style: AppTextStyles.bodySmall.copyWith(
-            color: AppColors.primary,
-            fontWeight: FontWeight.w500,
-          ),
-          minFontSize: 10,
-        ),
-      ],
-    );
-  }
-}
-
-class _ItemInfo extends StatelessWidget {
-  const _ItemInfo({
-    Key? key,
-    required this.title,
-    required this.info,
-  }) : super(key: key);
-
-  final String title;
-  final String info;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: AppDimensions.paddingXS),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "◦ $title: ",
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Expanded(
-            child: AutoSizeText(
-              info,
-              style: AppTextStyles.bodySmall.copyWith(
-                color: AppColors.textSecondary,
-              ),
-              minFontSize: 10,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ItemInfoList extends StatelessWidget {
-  const _ItemInfoList({
-    Key? key,
-    required this.title,
-    required this.moreInfo,
-    this.isExpanded = false,
-  }) : super(key: key);
-
-  final String title;
-  final List<String> moreInfo;
-  final bool isExpanded;
-
-  @override
-  Widget build(BuildContext context) {
-    if (moreInfo.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    final displayItems = isExpanded ? moreInfo : moreInfo.take(3).toList();
-    final hasMoreItems = moreInfo.length > 3;
-
-    return Padding(
-      padding: EdgeInsets.only(bottom: AppDimensions.paddingXS),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "◦ $title:",
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: AppDimensions.paddingXS / 2),
-          Padding(
-            padding: EdgeInsets.only(left: AppDimensions.paddingS),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...displayItems
-                    .map((item) => Padding(
-                          padding: EdgeInsets.only(bottom: 2),
-                          child: AutoSizeText(
-                            "• $item",
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                            minFontSize: 9,
-                            maxLines: isExpanded ? null : 2,
-                            overflow: isExpanded ? null : TextOverflow.ellipsis,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: _showProjectDetails,
+        child: Hero(
+          tag: widget.project.id ?? '',
+          child: GlassTechCard(
+            isHovered: _isHovered,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          widget.project.name?.toUpperCase() ?? "PROJECT_NAME",
+                          style: GoogleFonts.shareTechMono(
+                            color: AppColors.primary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            shadows: _isHovered
+                                ? [
+                                    Shadow(
+                                        color: AppColors.primary
+                                            .withValues(alpha: 0.5),
+                                        blurRadius: 10)
+                                  ]
+                                : [],
                           ),
-                        ))
-                    .toList(),
-                if (!isExpanded && hasMoreItems)
-                  Padding(
-                    padding: EdgeInsets.only(top: 4),
-                    child: Text(
-                      "... and ${moreInfo.length - 3} more",
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.primary.withOpacity(0.7),
-                        fontStyle: FontStyle.italic,
-                        fontSize: 10,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        widget.project.startTime?.split('/').last ?? "202X",
+                        style: GoogleFonts.shareTechMono(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "// ${widget.project.role?.toUpperCase()}",
+                    style: GoogleFonts.shareTechMono(
+                      color: AppColors.accentYellow.withValues(alpha: 0.7),
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSectionTitle("TECH_STACK"),
+                          const SizedBox(height: 8),
+                          _buildShortList(widget.project.techUsed ?? []),
+                        ],
                       ),
                     ),
                   ),
-              ],
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "OPEN_LOG",
+                          style: GoogleFonts.shareTechMono(
+                            fontSize: 10,
+                            color: _isHovered
+                                ? AppColors.primary
+                                : AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 14,
+                          color: _isHovered
+                              ? AppColors.primary
+                              : AppColors.textSecondary,
+                        )
+                            .animate(target: _isHovered ? 1 : 0)
+                            .moveX(begin: -5, end: 0)
+                            .fadeIn(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ],
+        ),
       ),
+    ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1, end: 0);
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      "> $title",
+      style: GoogleFonts.shareTechMono(
+        color: AppColors.textSecondary,
+        fontSize: 10,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget _buildShortList(List<String> items) {
+    if (items.isEmpty) return const SizedBox.shrink();
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      children: items
+          .take(4)
+          .map((item) => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.2)),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                child: Text(
+                  item,
+                  style: GoogleFonts.shareTechMono(
+                      fontSize: 9,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold),
+                ),
+              ))
+          .toList(),
     );
   }
 }

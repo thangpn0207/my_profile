@@ -1,220 +1,267 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
+import 'package:my_profile/components/tech_grid_background.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../core/app_colors.dart';
-import '../../core/app_dimensions.dart';
-import '../../core/app_text_styles.dart';
 import 'components/side_menu.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.children});
 
   final List<Widget> children;
 
   @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  final ScrollController _scrollController = ScrollController();
+  double _parallaxOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {
+        _parallaxOffset = _scrollController.offset;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<MyInfoBloc, MyInfoState>(
       builder: (context, state) {
-        if (state.loadingState == LoadingState.loading) {
-          return _buildLoadingScreen();
-        }
-        if (state.loadingState == LoadingState.err) {
-          return _buildErrorScreen();
-        }
-        return _buildMainContent(context);
+        return Scaffold(
+          backgroundColor: AppColors.background,
+          body: Stack(
+            children: [
+              // Enhanced Parallax Tech Grid
+              Transform.translate(
+                offset: Offset(0, -(_parallaxOffset * 0.15)),
+                child: const TechGridBackground(),
+              ),
+
+              AnimatedSwitcher(
+                duration: 800.ms,
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) {
+                  return Stack(
+                    children: <Widget>[
+                      ...previousChildren,
+                      if (currentChild != null) currentChild,
+                    ],
+                  );
+                },
+                child: _buildChildByState(context, state),
+              ),
+            ],
+          ),
+        );
       },
     );
   }
 
-  Widget _buildLoadingScreen() {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SizedBox.expand(
-        child: Center(
-          child: SizedBox(
-            width: 1500,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextLiquidFill(
-                  text: 'Welcome to my profile',
-                  waveColor: AppColors.primaryDark,
-                  boxBackgroundColor: AppColors.background,
-                  loadDuration: Duration(seconds: 3),
-                  waveDuration: Duration(seconds: 2),
-                  textStyle: AppTextStyles.displayLarge.copyWith(fontSize: 80),
-                  boxHeight: 300.0,
-                  boxWidth: 1500,
-                ),
-                DefaultTextStyle(
-                  style: GoogleFonts.imperialScript()
-                      .copyWith(color: AppColors.primaryDark, fontSize: 50),
-                  child: AnimatedTextKit(
-                    pause: Duration(seconds: 3),
-                    animatedTexts: [
-                      TyperAnimatedText('Phạm Ngọc Thắng'),
-                    ],
+  Widget _buildChildByState(BuildContext context, MyInfoState state) {
+    if (state.loadingState == LoadingState.loading) {
+      return _buildLoadingOverlay(key: const ValueKey('loading'));
+    }
+    if (state.loadingState == LoadingState.err) {
+      return _buildErrorOverlay(key: const ValueKey('error'));
+    }
+    return _buildMainContent(context, key: const ValueKey('content'));
+  }
+
+  Widget _buildLoadingOverlay({required Key key}) {
+    return Container(
+      key: key,
+      color: Colors.transparent,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.primary, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.2),
+                    blurRadius: 30,
+                    spreadRadius: 2,
                   ),
+                ],
+              ),
+              child: Text(
+                'SYSTEM_BOOTING',
+                style: GoogleFonts.shareTechMono(
+                  color: AppColors.primary,
+                  fontSize: 28,
+                  letterSpacing: 6,
                 ),
-              ],
+              ),
+            )
+                .animate(onPlay: (c) => c.repeat())
+                .shimmer(duration: 2.seconds, color: AppColors.accentYellow)
+                .shake(hz: 2, curve: Curves.easeInOut),
+            const SizedBox(height: 50),
+            SizedBox(
+              width: 250,
+              child: LinearProgressIndicator(
+                backgroundColor: AppColors.surface,
+                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              ),
+            ).animate().fadeIn(delay: 400.ms),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorOverlay({required Key key}) {
+    return Container(
+      key: key,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.terminal, size: 80, color: AppColors.error)
+                .animate(onPlay: (c) => c.repeat())
+                .shimmer(color: Colors.white, duration: 1.seconds),
+            const SizedBox(height: 20),
+            Text(
+              'FATAL_ERROR: DATA_INITIALIZATION_FAILED',
+              style: GoogleFonts.shareTechMono(color: AppColors.error, fontSize: 18),
             ),
-          ),
+            const SizedBox(height: 40),
+            OutlinedButton(
+              onPressed: () {},
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.error),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              ),
+              child: Text('REBOOT', style: GoogleFonts.shareTechMono(color: AppColors.error)),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildErrorScreen() {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(AppDimensions.paddingXL),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: AppColors.error,
-              ),
-              SizedBox(height: AppDimensions.paddingL),
-              Text(
-                'Oops! Something went wrong',
-                style: AppTextStyles.headlineSmall.copyWith(
-                  color: AppColors.textPrimary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: AppDimensions.paddingM),
-              Text(
-                'Please try again later',
-                style: AppTextStyles.bodyLarge.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: AppDimensions.paddingXL),
-              ElevatedButton(
-                onPressed: () {
-                  // You can add retry logic here if needed
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppDimensions.paddingXL,
-                    vertical: AppDimensions.paddingM,
-                  ),
-                ),
-                child: Text(
-                  'Retry',
-                  style: AppTextStyles.button,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMainContent(BuildContext context) {
+  Widget _buildMainContent(BuildContext context, {required Key key}) {
     final isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
-      // Hide the appbar on desktop
+      key: key,
+      backgroundColor: Colors.transparent,
       appBar: isDesktop
           ? null
           : AppBar(
-              backgroundColor: AppColors.background,
+              backgroundColor: AppColors.background.withValues(alpha: 0.95),
               elevation: 0,
+              centerTitle: true,
               leading: Builder(
                 builder: (context) => IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  icon: Icon(
-                    Icons.menu,
-                    color: AppColors.textPrimary,
-                    size: AppDimensions.iconM,
-                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  icon: const Icon(Icons.menu, color: AppColors.primary),
                 ),
+              ),
+              title: Text(
+                'PROFILE_OS v4.0',
+                style: GoogleFonts.shareTechMono(color: AppColors.primary, fontSize: 14),
+              ),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(1),
+                child: Container(color: AppColors.primary.withValues(alpha: 0.1), height: 1),
               ),
             ),
-      drawer: const SideMenu(),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingS),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (isDesktop)
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(AppDimensions.radiusM),
-                        bottomRight: Radius.circular(AppDimensions.radiusM),
-                      ),
+      drawer: isDesktop ? null : SideMenu(),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (isDesktop)
+            Expanded(
+              flex: 3,
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: AppColors.surface.withValues(alpha: 0.8),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.6),
+                      blurRadius: 40,
+                      offset: const Offset(0, 15),
                     ),
-                    child: const SideMenu(),
-                  ),
+                  ],
                 ),
-              if (isDesktop) SizedBox(width: AppDimensions.paddingM),
-              Expanded(
-                flex: 7,
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppDimensions.paddingL,
-                  ),
-                  child: Column(
-                    children: [
-                      ...children,
-                      SizedBox(height: AppDimensions.paddingXXL),
-                      _buildFooter(),
-                    ],
-                  ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SideMenu(),
                 ),
+              )
+                  .animate()
+                  .slideX(begin: -0.2, end: 0, duration: 600.ms, curve: Curves.easeOutCubic)
+                  .fadeIn(),
+            ),
+          Expanded(
+            flex: 9,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.symmetric(
+                horizontal: isDesktop ? 20 : 16,
+                vertical: isDesktop ? 20 : 10,
               ),
-              if (isDesktop) SizedBox(width: AppDimensions.paddingM),
-            ],
+              child: Column(
+                children: [
+                  ...widget.children.map((child) => Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: child,
+                      ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.05, end: 0)),
+                  const SizedBox(height: 60),
+                  _buildFooter(),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
   Widget _buildFooter() {
     return Container(
-      padding: EdgeInsets.all(AppDimensions.paddingL),
+      width: double.infinity,
+      padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusM),
+        color: AppColors.surface.withValues(alpha: 0.4),
+        border: Border(top: BorderSide(color: AppColors.primary.withValues(alpha: 0.1))),
       ),
       child: Column(
         children: [
           Text(
-            '© 2024 Pham Ngoc Thang. All rights reserved.',
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.textSecondary,
-            ),
-            textAlign: TextAlign.center,
+            'DESIGNED_BY // PHAM_NGOC_THANG',
+            style:
+                GoogleFonts.shareTechMono(color: AppColors.primary, fontSize: 14, letterSpacing: 2),
           ),
-          SizedBox(height: AppDimensions.paddingS),
+          const SizedBox(height: 12),
           Text(
-            'Built with Flutter 💙',
-            style: AppTextStyles.caption.copyWith(
-              color: AppColors.primary,
-            ),
-            textAlign: TextAlign.center,
+            'BUILT_WITH_FLUTTER_AND_PASSION © 2026',
+            style: GoogleFonts.shareTechMono(
+                color: AppColors.textSecondary.withValues(alpha: 0.6), fontSize: 10),
           ),
         ],
       ),

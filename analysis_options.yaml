@@ -35,8 +35,6 @@ analyzer:
 
 linter:
   rules:
-    # Better readability
-    unsafe_html: true
 
     #Suppressed Lints
     public_member_api_docs: false

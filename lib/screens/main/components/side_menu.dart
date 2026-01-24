@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
 import 'package:my_profile/utils/string_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/app_colors.dart';
-import '../../../core/app_dimensions.dart';
-import '../../../core/app_text_styles.dart';
 import '../../../models/user_info.dart';
 import 'area_info_text.dart';
 import 'coding.dart';
@@ -24,93 +23,103 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppColors.surface,
+      backgroundColor: Colors
+          .transparent, // Let the main container handle the color/glass effect
+      elevation: 0,
       child: BlocBuilder<MyInfoBloc, MyInfoState>(
         builder: (context, state) {
           final userInfo = state.userInfo;
-          return SafeArea(
-            child: Column(
-              children: [
-                const MyInfo(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.all(AppDimensions.paddingS),
-                    child: Column(
-                      children: [
-                        AreaInfoText(
-                          title: "Country",
-                          text: userInfo?.country ?? "",
-                        ),
-                        AreaInfoText(
-                          title: "City",
-                          text: userInfo?.city ?? "",
-                        ),
-                        AreaInfoText(
+          return Column(
+            children: [
+              const MyInfo(),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      _buildSectionTitle("GEOGRAPHIC_DATA"),
+                      AreaInfoText(
+                          title: "Country", text: userInfo?.country ?? ""),
+                      AreaInfoText(title: "City", text: userInfo?.city ?? ""),
+                      AreaInfoText(
                           title: "DOB",
-                          text: userInfo?.dob.formatStringToDOB(),
-                        ),
-                        AreaInfoText(
-                          title: userInfo?.university ?? '',
-                          text: userInfo?.universityRank ?? '',
-                        ),
-                        const CodingWidget(),
-                        SizedBox(height: AppDimensions.paddingM),
-                        const MySkills(),
-                        const KnowledgesWidget(),
-                        Divider(
-                          color: AppColors.divider,
-                          thickness: 1,
-                        ),
-                        SizedBox(height: AppDimensions.paddingS),
-                        _buildDownloadButton(context, userInfo?.cvURL ?? ''),
-                        _buildSocialMediaSection(context, userInfo),
-                      ],
-                    ),
+                          text: userInfo?.dob.formatStringToDOB()),
+                      const SizedBox(height: 20),
+                      _buildSectionTitle("EDUCATION_LOG"),
+                      AreaInfoText(
+                        title: userInfo?.university ?? 'UNIVERSITY',
+                        text: userInfo?.universityRank ?? '',
+                      ),
+                      const SizedBox(height: 20),
+                      const CodingWidget(),
+                      const SizedBox(height: 20),
+                      const MySkills(),
+                      const SizedBox(height: 20),
+                      const KnowledgesWidget(),
+                      const SizedBox(height: 30),
+                      Divider(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          thickness: 1),
+                      const SizedBox(height: 10),
+                      _buildDownloadButton(context, userInfo?.cvURL ?? ''),
+                      const SizedBox(height: 20),
+                      _buildSocialMediaSection(context, userInfo),
+                      const SizedBox(height: 20),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),
     );
   }
 
-  Widget _buildDownloadButton(BuildContext context, String cvUrl) {
-    return TextButton(
-      onPressed: () {
-        if (cvUrl.isNotEmpty) {
-          _launchUrl(cvUrl);
-        }
-      },
-      style: TextButton.styleFrom(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppDimensions.paddingM,
-          vertical: AppDimensions.paddingS,
-        ),
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Container(width: 4, height: 4, color: AppColors.primary),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: GoogleFonts.shareTechMono(
+              color: AppColors.textSecondary,
+              fontSize: 10,
+              letterSpacing: 2,
+            ),
+          ),
+        ],
       ),
-      child: FittedBox(
+    );
+  }
+
+  Widget _buildDownloadButton(BuildContext context, String cvUrl) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: TextButton(
+        onPressed: () => cvUrl.isNotEmpty ? _launchUrl(cvUrl) : null,
+        style: TextButton.styleFrom(padding: const EdgeInsets.all(16)),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "DOWNLOAD CV",
-              style: AppTextStyles.labelLarge.copyWith(
+              "ACCESS_CV.PDF",
+              style: GoogleFonts.shareTechMono(
                 color: AppColors.textPrimary,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.2,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2,
               ),
             ),
-            SizedBox(width: AppDimensions.paddingS),
-            SvgPicture.asset(
-              "assets/icons/download.svg",
-              width: AppDimensions.iconS,
-              height: AppDimensions.iconS,
-              colorFilter: ColorFilter.mode(
-                AppColors.primary,
-                BlendMode.srcIn,
-              ),
-            ),
+            const SizedBox(width: 12),
+            const Icon(Icons.download, color: AppColors.primary, size: 18),
           ],
         ),
       ),
@@ -118,100 +127,58 @@ class SideMenu extends StatelessWidget {
   }
 
   Widget _buildSocialMediaSection(BuildContext context, UserInfo? userInfo) {
-    return Container(
-      margin: EdgeInsets.only(top: AppDimensions.paddingM),
-      padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingS),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceDark,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusS),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildSocialButton(
-            onPressed: () => _launchUrl(userInfo?.linkinURL ?? ''),
-            icon: SvgPicture.asset(
-              "assets/icons/linkedin.svg",
-              width: AppDimensions.iconM,
-              height: AppDimensions.iconM,
-              colorFilter: ColorFilter.mode(
-                AppColors.textSecondary,
-                BlendMode.srcIn,
-              ),
-            ),
-            tooltip: 'LinkedIn',
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildSocialIcon(
+          onPressed: () => _launchUrl(userInfo?.linkinURL ?? ''),
+          icon: SvgPicture.asset(
+            "assets/icons/linkedin.svg",
+            width: 20,
+            colorFilter: const ColorFilter.mode(
+                AppColors.textSecondary, BlendMode.srcIn),
           ),
-          _buildSocialButton(
-            onPressed: () => _launchUrl(userInfo?.facebookURL ?? ''),
-            icon: LineIcon.facebookSquare(
-              color: AppColors.textSecondary,
-              size: AppDimensions.iconM,
-            ),
-            tooltip: 'Facebook',
+        ),
+        _buildSocialIcon(
+          onPressed: () => _launchUrl(userInfo?.facebookURL ?? ''),
+          icon:
+              LineIcon.facebookSquare(color: AppColors.textSecondary, size: 24),
+        ),
+        _buildSocialIcon(
+          onPressed: () => _launchUrl("mailto:${userInfo?.mailto ?? ''}"),
+          icon: const Icon(Icons.email_outlined,
+              color: AppColors.textSecondary, size: 22),
+        ),
+        _buildSocialIcon(
+          onPressed: () => _launchUrl(userInfo?.githubURL ?? ""),
+          icon: SvgPicture.asset(
+            "assets/icons/github.svg",
+            width: 20,
+            colorFilter: const ColorFilter.mode(
+                AppColors.textSecondary, BlendMode.srcIn),
           ),
-          _buildSocialButton(
-            onPressed: () => _launchUrl("mailto:${userInfo?.mailto ?? ''}"),
-            icon: Icon(
-              Icons.email_outlined,
-              color: AppColors.textSecondary,
-              size: AppDimensions.iconM,
-            ),
-            tooltip: 'Email',
-          ),
-          _buildSocialButton(
-            onPressed: () => _launchUrl(userInfo?.githubURL ?? ""),
-            icon: SvgPicture.asset(
-              "assets/icons/github.svg",
-              width: AppDimensions.iconM,
-              height: AppDimensions.iconM,
-              colorFilter: ColorFilter.mode(
-                AppColors.textSecondary,
-                BlendMode.srcIn,
-              ),
-            ),
-            tooltip: 'GitHub',
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _buildSocialButton({
-    required VoidCallback onPressed,
-    required Widget icon,
-    required String tooltip,
-  }) {
-    return Tooltip(
-      message: tooltip,
-      child: IconButton(
-        onPressed: onPressed,
-        icon: icon,
-        splashRadius: AppDimensions.iconM,
-        padding: EdgeInsets.all(AppDimensions.paddingS),
-      ),
+  Widget _buildSocialIcon(
+      {required VoidCallback onPressed, required Widget icon}) {
+    return IconButton(
+      onPressed: onPressed,
+      icon: icon,
+      hoverColor: AppColors.primary.withValues(alpha: 0.1),
+      splashRadius: 20,
     );
   }
-}
 
-Future<void> downloadFile(String urlStr) async {
-  try {
-    if (urlStr.isEmpty) return;
-  } catch (e) {
-    // Handle error silently or show user feedback
-    print('Error downloading file: $e');
-  }
-}
-
-Future<void> _launchUrl(String url) async {
-  try {
-    if (url.isEmpty) return;
-    final Uri _url = Uri.parse(url);
-
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
+  Future<void> _launchUrl(String url) async {
+    try {
+      if (url.isEmpty) return;
+      final Uri uri = Uri.parse(url);
+      if (!await launchUrl(uri)) throw Exception('Could not launch $uri');
+    } catch (e) {
+      debugPrint('Error launching URL: $e');
     }
-  } catch (e) {
-    // Handle error silently or show user feedback
-    print('Error launching URL: $e');
   }
 }

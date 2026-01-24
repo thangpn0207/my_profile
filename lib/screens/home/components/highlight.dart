@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
-import '../../../core/app_text_styles.dart';
 
 class HighLight extends StatefulWidget {
   const HighLight({
@@ -27,33 +27,39 @@ class _HighLightState extends State<HighLight> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
-        duration: Duration(milliseconds: AppDimensions.animationFast),
+        duration: const Duration(milliseconds: 200),
         padding: EdgeInsets.all(AppDimensions.paddingM),
         decoration: BoxDecoration(
-          color: _isHovered
-              ? AppColors.surface.withOpacity(0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusL),
-          border: _isHovered
-              ? Border.all(
-                  color: AppColors.primary.withOpacity(0.3),
-                  width: 1,
-                )
-              : null,
+          color: _isHovered ? AppColors.surface : Colors.transparent,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            color: _isHovered
+                ? AppColors.primary
+                : AppColors.primary.withOpacity(0.1),
+            width: 1,
+          ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.counter,
-            SizedBox(height: AppDimensions.paddingS),
+            DefaultTextStyle(
+              style: GoogleFonts.shareTechMono(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+              child: widget.counter,
+            ),
+            const SizedBox(height: 8),
             if (widget.label != null)
               Text(
-                widget.label!,
-                style: AppTextStyles.titleSmall.copyWith(
+                widget.label!.toUpperCase(),
+                style: GoogleFonts.shareTechMono(
                   color:
                       _isHovered ? AppColors.primary : AppColors.textSecondary,
-                  fontWeight: _isHovered ? FontWeight.w600 : FontWeight.w500,
+                  fontSize: 10,
+                  letterSpacing: 1.5,
                 ),
                 textAlign: TextAlign.center,
               ),
