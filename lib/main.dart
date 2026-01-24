@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,9 +9,10 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'bloc/my_info_bloc.dart';
 import 'core/app_route.dart';
 import 'core/app_theme.dart';
+import 'utils/web_utils.dart';
 
 void main() async {
-  setUrlStrategy(const HashUrlStrategy()); // ✅ fix lỗi trắng trang
+  setUrlStrategy(const HashUrlStrategy());
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize HydratedBloc storage
@@ -25,8 +25,22 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Remove the HTML loader after the first frame safely
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      removeNativeLoader();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
