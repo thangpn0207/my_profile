@@ -1,38 +1,185 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <!--
-      If you are serving your web app in a path other than the root, change the
-      href value below to reflect the base path you are serving from.
+  <base href="/my_profile/">
 
-      The path provided below has to start and end with a slash "/" in order for
-      it to work correctly.
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Senior Flutter Engineer Profile - Pham Ngoc Thang">
 
-      For more details:
-      * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  <!-- Mobile meta tags & icons -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Pham Ngoc Thang">
 
-      This is a placeholder for base href that will be replaced by the value of
-      the `--base-href` argument provided to `flutter build`.
-    -->
-    <base href="/my_profile/">
+  <link rel="icon" type="image/png" href="dragon.png" />
+  <title>Pham Ngoc Thang | Senior Flutter Engineer</title>
+  <link rel="manifest" href="manifest.json">
 
-    <meta charset="UTF-8">
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-    <meta name="description" content="Web profile phamthang.">
+  <style>
+    body {
+      background-color: #0B0B0F;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100vw;
+      font-family: 'Courier New', Courier, monospace;
+    }
 
-    <!-- iOS meta tags & icons -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Pham Ngoc Thang">
-    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    .loader-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="dragon.png"/>
+    .loader-box {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border: 2px solid #FFD700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
 
-    <title>Pham Ngoc Thang</title>
-    <link rel="manifest" href="manifest.json">
+    .loader-box::before {
+      content: "";
+      position: absolute;
+      width: calc(100% + 10px);
+      height: calc(100% + 10px);
+      border: 1px solid rgba(255, 215, 0, 0.1);
+      animation: rotate 4s linear infinite;
+    }
+
+    .inner-square {
+      width: 60px;
+      height: 60px;
+      background-color: #FFD700;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .loader-text {
+      color: #FFD700;
+      font-size: 14px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      animation: flicker 2s infinite;
+    }
+
+    .progress-bar {
+      width: 200px;
+      height: 2px;
+      background: rgba(255, 215, 0, 0.1);
+      margin-top: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-inner {
+      position: absolute;
+      height: 100%;
+      width: 50%;
+      background: #FFD700;
+      box-shadow: 0 0 10px #FFD700;
+      animation: moveProgress 2s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes flicker {
+
+      0%,
+      19%,
+      21%,
+      23%,
+      25%,
+      54%,
+      56%,
+      100% {
+        opacity: 1;
+      }
+
+      20%,
+      22%,
+      24%,
+      55% {
+        opacity: 0.5;
+      }
+    }
+
+    @keyframes moveProgress {
+      0% {
+        left: -50%;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    /* Hide the loader when Flutter is ready */
+    .flutter-ready .loader-container {
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
-<script src="flutter_bootstrap.js" async></script>
+  <div id="loading-indicator" class="loader-container">
+    <div class="loader-box">
+      <div class="inner-square"></div>
+    </div>
+    <div class="loader-text">Initializing OS...</div>
+    <div class="progress-bar">
+      <div class="progress-inner"></div>
+    </div>
+  </div>
+
+  <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    function removeLoader() {
+      var loader = document.getElementById('loading-indicator');
+      if (loader) {
+        loader.style.transition = 'opacity 0.5s ease';
+        loader.style.opacity = '0';
+        setTimeout(function () {
+          loader.remove();
+        }, 500);
+      }
+    }
+  </script>
 </body>
+
 </html>
