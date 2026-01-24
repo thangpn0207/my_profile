@@ -4,10 +4,10 @@ import 'package:my_profile/core/app_colors.dart';
 
 class AnimatedCounter extends StatelessWidget {
   const AnimatedCounter({
-    Key? key,
+    super.key,
     required this.value,
     this.text,
-  }) : super(key: key);
+  });
 
   final int value;
   final String? text;
@@ -19,13 +19,12 @@ class AnimatedCounter extends StatelessWidget {
       duration: Duration(milliseconds: AppDimensions.animationSlowHigh),
       builder: (context, animatedValue, child) {
         return TweenAnimationBuilder<Color?>(
-          tween:
-              ColorTween(begin: AppColors.primaryLight, end: AppColors.primary),
+          tween: ColorTween(begin: AppColors.primary, end: AppColors.primary),
           duration: Duration(milliseconds: AppDimensions.animationSlowHigh),
           builder: (context, color, _) => Column(
             children: [
               Text(
-                "${animatedValue}${text ?? ''}",
+                "$animatedValue${text ?? ''}",
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: color,

@@ -3,37 +3,50 @@ import 'package:flutter/material.dart';
 /// Centralized color palette for the application
 /// Using semantic naming for better understanding and maintainability
 class AppColors {
-  // Private constructor to prevent instantiation
   AppColors._();
 
-  // Primary colors
-  static const Color primary = Color(0xFFFFC107);
-  static const Color primaryLight = Color(0xFFFFD54F);
-  static const Color primaryDark = Color(0xFFF57C00);
+  // --- Cyberpunk / Tech Yellows ---
+  static const Color primary = Color(0xFFFFC107); // Pure Yellow
+  static const Color accentYellow = Color(0xFFFFFF00); // Neon Yellow
+  static const Color gold = Color(0xFFFFD700);
+  static const Color lightYellow = Color(0xFFFFF176);
+  static const Color glowYellow = Color(0x80FFC107); // 50% opacity primary
 
-  // Surface colors
-  static const Color surface = Color(0xFF242430);
-  static const Color surfaceDark = Color(0xFF191923);
-  static const Color background = Color(0xFF1E1E28);
+  // --- Deep Blacks & Grays (Tech Style) ---
+  static const Color background = Color(0xFF0A0A0B); // Deep space black
+  static const Color surface = Color(0xFF141417); // Slightly lighter dark
+  static const Color surfaceDark = Color(0xFF0F0F12);
+  static const Color cardBg = Color(0xFF1D1D21);
 
-  // Text colors
-  static const Color textPrimary = Colors.white;
-  static const Color textSecondary = Color(0xFF8B8B8D);
+  // --- Gradients ---
+  static const LinearGradient techGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [primary, Color(0xFFF57C00)],
+  );
+
+  static const LinearGradient darkGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [surface, background],
+  );
+
+  // --- Text Colors ---
+  static const Color textPrimary = Color(0xFFFFFFFF);
+  static const Color textSecondary = Color(0xFFA0A0A5);
   static const Color textDisabled = Color(0xFF5A5A5C);
 
-  // Status colors
-  static const Color success = Color(0xFF4CAF50);
-  static const Color error = Color(0xFFF44336);
-  static const Color warning = Color(0xFFFF9800);
-  static const Color info = Color(0xFF2196F3);
+  // --- Status & Accent ---
+  static const Color success = Color(0xFF00E676);
+  static const Color error = Color(0xFFFF5252);
+  static const Color warning = Color(0xFFFFD600);
+  static const Color info = Color(0xFF00B0FF);
 
-  // Additional colors
-  static const Color divider = Color(0xFF3A3A3A);
-  static const Color shadow = Color(0x1A000000);
-  static const Color overlay = Color(0x8A000000);
+  // --- Borders & Dividers (Thin Tech Lines) ---
+  static const Color divider = Color(0xFF2D2D33);
+  static const Color glowBorder = Color(0x33FFC107);
 
-  // Material color swatch for primary color
-  static const MaterialColor primarySwatch = MaterialColor(
+  static final MaterialColor primarySwatch = MaterialColor(
     0xFFFFC107,
     <int, Color>{
       50: Color(0xFFFFF8E1),

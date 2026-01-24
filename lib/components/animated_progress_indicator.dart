@@ -1,9 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../core/app_colors.dart';
-import '../core/app_dimensions.dart';
-import '../core/app_text_styles.dart';
 
 class AnimatedCircularProgressIndicator extends StatelessWidget {
   const AnimatedCircularProgressIndicator({
@@ -23,7 +22,7 @@ class AnimatedCircularProgressIndicator extends StatelessWidget {
           aspectRatio: 1,
           child: TweenAnimationBuilder(
             tween: Tween<double>(begin: 0, end: percentage),
-            duration: Duration(milliseconds: AppDimensions.animationSlowHigh),
+            duration: const Duration(milliseconds: 1500),
             builder: (context, double value, child) => Stack(
               fit: StackFit.expand,
               children: [
@@ -36,7 +35,7 @@ class AnimatedCircularProgressIndicator extends StatelessWidget {
                 Center(
                   child: AutoSizeText(
                     "${(value * 100).toInt()}%",
-                    style: AppTextStyles.bodySmall,
+                    style: GoogleFonts.shareTechMono(color: AppColors.primary),
                     minFontSize: 12,
                   ),
                 ),
@@ -44,12 +43,13 @@ class AnimatedCircularProgressIndicator extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: AppDimensions.paddingS),
+        const SizedBox(height: 8),
         AutoSizeText(
-          label,
+          label.toUpperCase(),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.bodySmall,
+          style: GoogleFonts.shareTechMono(
+              color: AppColors.textSecondary, fontSize: 10),
           minFontSize: 8,
         ),
       ],
@@ -70,10 +70,10 @@ class AnimatedLinearProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: AppDimensions.paddingM),
+      padding: const EdgeInsets.only(bottom: 16),
       child: TweenAnimationBuilder(
         tween: Tween<double>(begin: 0, end: percentage),
-        duration: Duration(milliseconds: AppDimensions.animationSlowHigh),
+        duration: const Duration(milliseconds: 1000),
         builder: (context, double value, child) => Column(
           children: [
             Row(
@@ -81,29 +81,52 @@ class AnimatedLinearProgressIndicator extends StatelessWidget {
               children: [
                 Expanded(
                   child: AutoSizeText(
-                    label,
+                    "// ${label.toUpperCase()}",
                     minFontSize: 10,
-                    style: AppTextStyles.bodySmall.copyWith(
+                    style: GoogleFonts.shareTechMono(
                       color: AppColors.textPrimary,
+                      fontSize: 12,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(width: AppDimensions.paddingS),
+                const SizedBox(width: 8),
                 AutoSizeText(
                   "${(value * 100).toInt()}%",
                   minFontSize: 10,
-                  style: AppTextStyles.caption,
+                  style: GoogleFonts.shareTechMono(
+                      color: AppColors.primary, fontSize: 12),
                 ),
               ],
             ),
-            SizedBox(height: AppDimensions.paddingS),
-            LinearProgressIndicator(
-              value: value,
-              color: AppColors.primary,
-              backgroundColor: AppColors.surfaceDark,
-              minHeight: 4,
+            const SizedBox(height: 8),
+            Container(
+              height: 6,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceDark,
+                borderRadius: BorderRadius.circular(2),
+              ),
+              child: Stack(
+                children: [
+                  FractionallySizedBox(
+                    widthFactor: value,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.5),
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

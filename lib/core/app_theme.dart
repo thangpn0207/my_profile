@@ -18,16 +18,14 @@ class AppTheme {
       // Color scheme
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
-        primaryContainer: AppColors.primaryDark,
+        primaryContainer: AppColors.primary,
         secondary: AppColors.primary,
-        secondaryContainer: AppColors.primaryDark,
+        secondaryContainer: AppColors.primary,
         surface: AppColors.surface,
-        background: AppColors.background,
         error: AppColors.error,
         onPrimary: Colors.black,
         onSecondary: Colors.black,
         onSurface: AppColors.textPrimary,
-        onBackground: AppColors.textPrimary,
         onError: Colors.white,
       ),
 
@@ -169,7 +167,7 @@ class AppTheme {
         deleteIconColor: AppColors.textSecondary,
         disabledColor: AppColors.surfaceDark,
         selectedColor: AppColors.primary,
-        secondarySelectedColor: AppColors.primaryDark,
+        secondarySelectedColor: AppColors.primary,
         padding: EdgeInsets.symmetric(
           horizontal: AppDimensions.paddingM,
           vertical: AppDimensions.paddingS,
@@ -215,8 +213,8 @@ class AppTheme {
         height: AppDimensions.bottomNavHeight,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         indicatorColor: AppColors.primary.withOpacity(0.2),
-        iconTheme: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return IconThemeData(
               color: AppColors.primary,
               size: AppDimensions.iconM,
@@ -227,8 +225,8 @@ class AppTheme {
             size: AppDimensions.iconM,
           );
         }),
-        labelTextStyle: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return AppTextStyles.labelSmall.copyWith(
               color: AppColors.primary,
             );

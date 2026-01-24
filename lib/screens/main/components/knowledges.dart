@@ -1,12 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
 
 import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
-import '../../../core/app_text_styles.dart';
 
 class KnowledgesWidget extends StatelessWidget {
   const KnowledgesWidget({
@@ -22,17 +21,16 @@ class KnowledgesWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Divider(
-              color: AppColors.divider,
-              thickness: 1,
-            ),
+            const Divider(color: AppColors.glowBorder, thickness: 1),
             Padding(
               padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
               child: Text(
-                "Knowledges",
-                style: AppTextStyles.titleMedium.copyWith(
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.w600,
+                "SYSTEM_KNOWLEDGE",
+                style: GoogleFonts.shareTechMono(
+                  color: AppColors.primary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
                 ),
               ),
             ),
@@ -41,14 +39,11 @@ class KnowledgesWidget extends StatelessWidget {
                     text: e.name ?? '',
                   ))
             else
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
-                child: Text(
-                  'No knowledge items available',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
-                    fontStyle: FontStyle.italic,
-                  ),
+              Text(
+                'ERROR: NO_DATA_AVAILABLE',
+                style: GoogleFonts.shareTechMono(
+                  color: AppColors.error,
+                  fontSize: 12,
                 ),
               ),
           ],
@@ -60,38 +55,33 @@ class KnowledgesWidget extends StatelessWidget {
 
 class KnowledgeText extends StatelessWidget {
   const KnowledgeText({
-    Key? key,
+    super.key,
     required this.text,
-  }) : super(key: key);
+  });
 
   final String text;
 
   @override
   Widget build(BuildContext context) {
-    if (text.isEmpty) {
-      return const SizedBox.shrink();
-    }
+    if (text.isEmpty) return const SizedBox.shrink();
 
     return Padding(
-      padding: EdgeInsets.only(bottom: AppDimensions.paddingS),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SvgPicture.asset(
-            "assets/icons/check.svg",
-            width: AppDimensions.iconS,
-            height: AppDimensions.iconS,
-            colorFilter: ColorFilter.mode(
-              AppColors.primary,
-              BlendMode.srcIn,
-            ),
+          const Icon(
+            Icons.code,
+            size: 14,
+            color: AppColors.primary,
           ),
-          SizedBox(width: AppDimensions.paddingS),
+          const SizedBox(width: 12),
           Expanded(
             child: AutoSizeText(
-              text,
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textPrimary,
+              text.toUpperCase(),
+              style: GoogleFonts.shareTechMono(
+                color: AppColors.textSecondary,
+                fontSize: 12,
               ),
               minFontSize: 10,
               maxLines: 2,

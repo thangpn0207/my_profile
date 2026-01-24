@@ -16,6 +16,7 @@
 /// facebookURL : ""
 /// linkinURL : ""
 /// mailto : ""
+library;
 
 class UserInfo {
   UserInfo({

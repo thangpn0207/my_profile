@@ -8,6 +8,7 @@
 /// tasks : ["Authentication","User infomation"]
 /// startTime : "April/2021"
 /// endTime : "June/2021"
+library;
 
 class MyProject {
   MyProject({

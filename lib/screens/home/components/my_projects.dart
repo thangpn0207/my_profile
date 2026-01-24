@@ -1,60 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
 
 import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
-import '../../../core/app_text_styles.dart';
 import 'project_card.dart';
 
-class MyProjects extends StatefulWidget {
+class MyProjects extends StatelessWidget {
   const MyProjects({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<MyProjects> createState() => _MyProjectsState();
-}
-
-class _MyProjectsState extends State<MyProjects>
-    with SingleTickerProviderStateMixin {
-  bool _showAllProjects = false;
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: Duration(milliseconds: AppDimensions.animationNormal),
-      vsync: this,
-    );
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void _toggleProjects() {
-    setState(() {
-      _showAllProjects = !_showAllProjects;
-    });
-    if (_showAllProjects) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
-  }
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,22 +32,22 @@ class _MyProjectsState extends State<MyProjects>
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
-            borderRadius: BorderRadius.circular(AppDimensions.radiusM),
           ),
           child: Row(
             children: [
-              Icon(
-                Icons.work_outline,
+              const Icon(
+                Icons.code,
                 color: AppColors.primary,
-                size: AppDimensions.iconL,
+                size: 24,
               ),
-              SizedBox(width: AppDimensions.paddingS),
+              const SizedBox(width: 12),
               Text(
-                "PROJECTS",
-                style: AppTextStyles.headlineMedium.copyWith(
+                "PROJECT_LOGS",
+                style: GoogleFonts.shareTechMono(
                   color: Colors.white,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.bold,
                   fontSize: 24,
+                  letterSpacing: 2,
                 ),
               ),
             ],
@@ -108,7 +65,7 @@ class _MyProjectsState extends State<MyProjects>
     if (breakpoints.isMobile) {
       return const ProjectsGridView(
         crossAxisCount: 1,
-        childAspectRatio: 1.7,
+        childAspectRatio: 1.5,
       );
     } else if (breakpoints.isTablet) {
       return const ProjectsGridView(
@@ -118,7 +75,7 @@ class _MyProjectsState extends State<MyProjects>
     } else {
       return const ProjectsGridView(
         crossAxisCount: 3,
-        childAspectRatio: 1.3,
+        childAspectRatio: 1.2,
       );
     }
   }
@@ -126,10 +83,10 @@ class _MyProjectsState extends State<MyProjects>
 
 class ProjectsGridView extends StatefulWidget {
   const ProjectsGridView({
-    Key? key,
+    super.key,
     this.crossAxisCount = 3,
     this.childAspectRatio = 1.3,
-  }) : super(key: key);
+  });
 
   final int crossAxisCount;
   final double childAspectRatio;
@@ -148,7 +105,7 @@ class _ProjectsGridViewState extends State<ProjectsGridView>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: AppDimensions.animationNormal),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
     _rotationAnimation = Tween<double>(
@@ -186,8 +143,8 @@ class _ProjectsGridViewState extends State<ProjectsGridView>
             child: Padding(
               padding: EdgeInsets.all(AppDimensions.paddingXL),
               child: Text(
-                'No projects available',
-                style: AppTextStyles.bodyLarge,
+                'ERROR: NO_PROJECTS_LOADED',
+                style: GoogleFonts.shareTechMono(color: AppColors.error),
               ),
             ),
           );
@@ -212,56 +169,35 @@ class _ProjectsGridViewState extends State<ProjectsGridView>
               ),
               itemBuilder: (context, index) => ProjectCard(
                 project: displayProjects[index],
+                allProjects: displayProjects,
+                index: index,
               ),
             ),
             if (hasMoreProjects) ...[
-              SizedBox(height: AppDimensions.paddingL),
+              const SizedBox(height: 20),
               Center(
-                child: AnimatedBuilder(
-                  animation: _rotationAnimation,
-                  builder: (context, child) {
-                    return Transform.rotate(
-                      angle: _rotationAnimation.value * 3.14159,
-                      child: ElevatedButton(
-                        onPressed: _toggleProjects,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: AppDimensions.paddingXL,
-                            vertical: AppDimensions.paddingM,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(AppDimensions.radiusL),
-                          ),
-                          elevation: 4,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: AppColors.surfaceDark,
-                              size: AppDimensions.iconM,
-                            ),
-                            SizedBox(width: AppDimensions.paddingS),
-                            Flexible(
-                              child: Text(
-                                _showAllProjects
-                                    ? "Show Less"
-                                    : "See More Projects",
-                                style: AppTextStyles.labelMedium.copyWith(
-                                  color: AppColors.surfaceDark,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
+                child: OutlinedButton(
+                  onPressed: _toggleProjects,
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: AppColors.primary),
+                    foregroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 16),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RotationTransition(
+                        turns: _rotationAnimation,
+                        child: const Icon(Icons.keyboard_arrow_down),
                       ),
-                    );
-                  },
+                      const SizedBox(width: 8),
+                      Text(
+                        _showAllProjects ? "COLLAPSE_LOGS" : "EXPAND_FULL_LOGS",
+                        style: GoogleFonts.shareTechMono(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

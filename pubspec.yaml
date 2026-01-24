@@ -61,6 +61,8 @@ dependencies:
   responsive_framework: ^1.1.1
   go_router: ^15.1.2
   liquid_glass_renderer: ^0.1.1-dev.10
+  flutter_animate: ^4.5.0
+
 
   # Add web package to fix compilation issues
   web: ^0.5.1
