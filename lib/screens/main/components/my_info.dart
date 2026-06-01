@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_profile/core/build_version.dart';
+import 'package:my_profile/models/user_info.dart';
 
 import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
 
 class MyInfo extends StatelessWidget {
+  final UserInfo? userInfo;
+
   const MyInfo({
     super.key,
+    this.userInfo,
   });
 
   @override
@@ -39,8 +44,7 @@ class MyInfo extends StatelessWidget {
                   border: Border.all(color: AppColors.primary, width: 1),
                 ),
                 child: const Center(
-                  child: Icon(Icons.psychology,
-                      color: AppColors.primary, size: 24),
+                  child: Icon(Icons.psychology, color: AppColors.primary, size: 24),
                 ),
               ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
               const SizedBox(width: 12),
@@ -56,7 +60,9 @@ class MyInfo extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "THANG_PN.DEV",
+                    userInfo?.userName != null
+                        ? "${userInfo!.userName!.toUpperCase()}.DEV"
+                        : "THANG_PN.DEV",
                     style: GoogleFonts.shareTechMono(
                       fontSize: 14,
                       color: AppColors.primary,
@@ -71,7 +77,9 @@ class MyInfo extends StatelessWidget {
           const SizedBox(height: 24),
 
           // System Metrics / Status
-          _buildStatusRow("OS_VERSION", "FLUTTER_3.27.0"),
+          _buildStatusRow("OS_VERSION", "FLUTTER_${BuildVersion.flutterVersion}"),
+          const SizedBox(height: 8),
+          _buildStatusRow("APP_VERSION", "v${BuildVersion.appVersion}"),
           const SizedBox(height: 8),
           _buildStatusRow("CORE_LOAD", "STABLE"),
           const SizedBox(height: 8),
@@ -111,15 +119,12 @@ class MyInfo extends StatelessWidget {
       children: [
         Text(
           "> $label:",
-          style: GoogleFonts.shareTechMono(
-              fontSize: 10, color: AppColors.textSecondary),
+          style: GoogleFonts.shareTechMono(fontSize: 10, color: AppColors.textSecondary),
         ),
         Text(
           value,
           style: GoogleFonts.shareTechMono(
-              fontSize: 10,
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.bold),
+              fontSize: 10, color: AppColors.textPrimary, fontWeight: FontWeight.bold),
         ),
       ],
     );

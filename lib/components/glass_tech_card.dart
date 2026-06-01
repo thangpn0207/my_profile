@@ -63,6 +63,7 @@ class GlassTechCard extends StatefulWidget {
 class _GlassTechCardState extends State<GlassTechCard> {
   double rotateX = 0;
   double rotateY = 0;
+  Offset mousePos = Offset.zero;
 
   @override
   Widget build(BuildContext context) {
@@ -77,11 +78,13 @@ class _GlassTechCardState extends State<GlassTechCard> {
         setState(() {
           rotateY = (event.localPosition.dx - centerX) / centerX * 0.08;
           rotateX = (centerY - event.localPosition.dy) / centerY * 0.08;
+          mousePos = event.localPosition;
         });
       },
       onExit: (_) => setState(() {
         rotateX = 0;
         rotateY = 0;
+        mousePos = Offset.zero;
       }),
       child: Transform(
         transform: Matrix4.identity()
@@ -118,18 +121,49 @@ class _GlassTechCardState extends State<GlassTechCard> {
                         : AppColors.primary.withValues(alpha: 0.1),
                   ),
                 ),
-                child: Stack(
-                  children: [
-                    CustomPaint(
-                      size: Size.infinite,
-                      painter: TechCardDecoration(
-                        color: widget.isHovered
-                            ? AppColors.primary
-                            : AppColors.primary.withValues(alpha: 0.2),
-                      ),
-                    ),
-                    widget.child,
-                  ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final width = constraints.hasBoundedWidth ? constraints.maxWidth : 300.0;
+                    final height = constraints.hasBoundedHeight ? constraints.maxHeight : 200.0;
+                    final size = Size(width, height);
+                    return Stack(
+                      children: [
+                        CustomPaint(
+                          size: Size.infinite,
+                          painter: TechCardDecoration(
+                            color: widget.isHovered
+                                ? AppColors.primary
+                                : AppColors.primary.withValues(alpha: 0.2),
+                          ),
+                        ),
+                        
+                        // Dynamic Specular Shine / Glass light reflection highlight
+                        if (widget.isHovered && !isMobile)
+                          Positioned.fill(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: RadialGradient(
+                                    center: Alignment(
+                                      (mousePos.dx / (size.width > 0 ? size.width : 1)) * 2 - 1,
+                                      (mousePos.dy / (size.height > 0 ? size.height : 1)) * 2 - 1,
+                                    ),
+                                    radius: 0.7,
+                                    colors: [
+                                      Colors.white.withValues(alpha: 0.12),
+                                      Colors.transparent,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          
+                        widget.child,
+                      ],
+                    );
+                  }
                 ),
               ),
             ),

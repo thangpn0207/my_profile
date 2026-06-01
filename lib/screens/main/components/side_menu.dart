@@ -4,11 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
+import 'package:my_profile/core/app_colors.dart';
+import 'package:my_profile/models/user_info.dart';
 import 'package:my_profile/utils/string_util.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
-import '../../../core/app_colors.dart';
-import '../../../models/user_info.dart';
 import 'area_info_text.dart';
 import 'coding.dart';
 import 'knowledges.dart';
@@ -23,15 +24,14 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors
-          .transparent, // Let the main container handle the color/glass effect
+      backgroundColor: Colors.transparent, // Let the main container handle the color/glass effect
       elevation: 0,
       child: BlocBuilder<MyInfoBloc, MyInfoState>(
         builder: (context, state) {
           final userInfo = state.userInfo;
           return Column(
             children: [
-              const MyInfo(),
+              MyInfo(userInfo: userInfo),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -39,12 +39,9 @@ class SideMenu extends StatelessWidget {
                   child: Column(
                     children: [
                       _buildSectionTitle("GEOGRAPHIC_DATA"),
-                      AreaInfoText(
-                          title: "Country", text: userInfo?.country ?? ""),
+                      AreaInfoText(title: "Country", text: userInfo?.country ?? ""),
                       AreaInfoText(title: "City", text: userInfo?.city ?? ""),
-                      AreaInfoText(
-                          title: "DOB",
-                          text: userInfo?.dob.formatStringToDOB()),
+                      AreaInfoText(title: "DOB", text: userInfo?.dob.formatStringToDOB()),
                       const SizedBox(height: 20),
                       _buildSectionTitle("EDUCATION_LOG"),
                       AreaInfoText(
@@ -58,9 +55,7 @@ class SideMenu extends StatelessWidget {
                       const SizedBox(height: 20),
                       const KnowledgesWidget(),
                       const SizedBox(height: 30),
-                      Divider(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          thickness: 1),
+                      Divider(color: AppColors.primary.withValues(alpha: 0.1), thickness: 1),
                       const SizedBox(height: 10),
                       _buildDownloadButton(context, userInfo?.cvURL ?? ''),
                       const SizedBox(height: 20),
@@ -98,29 +93,33 @@ class SideMenu extends StatelessWidget {
   }
 
   Widget _buildDownloadButton(BuildContext context, String cvUrl) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: TextButton(
-        onPressed: () => cvUrl.isNotEmpty ? _launchUrl(cvUrl) : null,
-        style: TextButton.styleFrom(padding: const EdgeInsets.all(16)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "ACCESS_CV.PDF",
-              style: GoogleFonts.shareTechMono(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
+    return LiquidStretch(
+      stretch: 0.4,
+      resistance: 0.05,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: TextButton(
+          onPressed: () => cvUrl.isNotEmpty ? _launchUrl(cvUrl) : null,
+          style: TextButton.styleFrom(padding: const EdgeInsets.all(16)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "MY_CV.PDF",
+                style: GoogleFonts.shareTechMono(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            const Icon(Icons.download, color: AppColors.primary, size: 18),
-          ],
+              const SizedBox(width: 12),
+              const Icon(Icons.download, color: AppColors.primary, size: 18),
+            ],
+          ),
         ),
       ),
     );
@@ -135,35 +134,30 @@ class SideMenu extends StatelessWidget {
           icon: SvgPicture.asset(
             "assets/icons/linkedin.svg",
             width: 20,
-            colorFilter: const ColorFilter.mode(
-                AppColors.textSecondary, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(AppColors.textSecondary, BlendMode.srcIn),
           ),
         ),
         _buildSocialIcon(
           onPressed: () => _launchUrl(userInfo?.facebookURL ?? ''),
-          icon:
-              LineIcon.facebookSquare(color: AppColors.textSecondary, size: 24),
+          icon: LineIcon.facebookSquare(color: AppColors.textSecondary, size: 24),
         ),
         _buildSocialIcon(
           onPressed: () => _launchUrl("mailto:${userInfo?.mailto ?? ''}"),
-          icon: const Icon(Icons.email_outlined,
-              color: AppColors.textSecondary, size: 22),
+          icon: const Icon(Icons.email_outlined, color: AppColors.textSecondary, size: 22),
         ),
         _buildSocialIcon(
           onPressed: () => _launchUrl(userInfo?.githubURL ?? ""),
           icon: SvgPicture.asset(
             "assets/icons/github.svg",
             width: 20,
-            colorFilter: const ColorFilter.mode(
-                AppColors.textSecondary, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(AppColors.textSecondary, BlendMode.srcIn),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildSocialIcon(
-      {required VoidCallback onPressed, required Widget icon}) {
+  Widget _buildSocialIcon({required VoidCallback onPressed, required Widget icon}) {
     return IconButton(
       onPressed: onPressed,
       icon: icon,
@@ -175,8 +169,24 @@ class SideMenu extends StatelessWidget {
   Future<void> _launchUrl(String url) async {
     try {
       if (url.isEmpty) return;
-      final Uri uri = Uri.parse(url);
-      if (!await launchUrl(uri)) throw Exception('Could not launch $uri');
+
+      Uri uri;
+      if (!url.startsWith('http') && !url.startsWith('mailto') && !url.startsWith('tel')) {
+        // Resolve relative paths dynamically on the web against the host's base URL (Uri.base)
+        final String basePath = Uri.base.toString();
+        final String cleanedBase = basePath.split('?').first.split('#').first;
+        if (cleanedBase.endsWith('/')) {
+          uri = Uri.parse('$cleanedBase$url');
+        } else {
+          uri = Uri.parse('$cleanedBase/$url');
+        }
+      } else {
+        uri = Uri.parse(url);
+      }
+
+      if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+        throw Exception('Could not launch $uri');
+      }
     } catch (e) {
       debugPrint('Error launching URL: $e');
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
+import 'package:my_profile/core/project_keys.dart';
 import 'package:my_profile/screens/main/main_screen.dart';
 
 import '../../core/app_dimensions.dart';
@@ -31,9 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
         const HomeBanner(),
         const HighLightsInfo(),
         SizedBox(height: AppDimensions.paddingM),
-        const MyProjects(),
+        MyProjects(key: ProjectKeys.projectsKey),
         SizedBox(height: AppDimensions.paddingM),
-        const AboutMe(),
+        AboutMe(key: ProjectKeys.aboutMeKey),
       ],
     );
   }
