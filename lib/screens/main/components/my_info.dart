@@ -39,8 +39,7 @@ class MyInfo extends StatelessWidget {
                   border: Border.all(color: AppColors.primary, width: 1),
                 ),
                 child: const Center(
-                  child: Icon(Icons.psychology,
-                      color: AppColors.primary, size: 24),
+                  child: Icon(Icons.psychology, color: AppColors.primary, size: 24),
                 ),
               ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
               const SizedBox(width: 12),
@@ -111,15 +110,12 @@ class MyInfo extends StatelessWidget {
       children: [
         Text(
           "> $label:",
-          style: GoogleFonts.shareTechMono(
-              fontSize: 10, color: AppColors.textSecondary),
+          style: GoogleFonts.shareTechMono(fontSize: 10, color: AppColors.textSecondary),
         ),
         Text(
           value,
           style: GoogleFonts.shareTechMono(
-              fontSize: 10,
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.bold),
+              fontSize: 10, color: AppColors.textPrimary, fontWeight: FontWeight.bold),
         ),
       ],
     );
