@@ -16,6 +16,7 @@
 /// facebookURL : ""
 /// linkinURL : ""
 /// mailto : ""
+library;
 
 class UserInfo {
   UserInfo({
@@ -36,6 +37,7 @@ class UserInfo {
     String? cvURL,
     String? facebookURL,
     String? linkinURL,
+    String? githubURL,
     String? mailto,
   }) {
     _id = id;
@@ -91,6 +93,7 @@ class UserInfo {
     _cvURL = json['cvURL'];
     _facebookURL = json['facebookURL'];
     _linkinURL = json['linkinURL'];
+    _githubURL = json['githubURL'];
     _mailto = json['mailto'];
   }
   String? _id;
@@ -110,6 +113,7 @@ class UserInfo {
   String? _cvURL;
   String? _facebookURL;
   String? _linkinURL;
+  String? _githubURL;
   String? _mailto;
   UserInfo copyWith({
     String? id,
@@ -130,6 +134,7 @@ class UserInfo {
     String? facebookURL,
     String? linkinURL,
     String? mailto,
+    String? githubURL,
   }) =>
       UserInfo(
         id: id ?? _id,
@@ -149,6 +154,7 @@ class UserInfo {
         cvURL: cvURL ?? _cvURL,
         facebookURL: facebookURL ?? _facebookURL,
         linkinURL: linkinURL ?? _linkinURL,
+        githubURL: githubURL ?? _githubURL,
         mailto: mailto ?? _mailto,
       );
   String? get id => _id;
@@ -168,6 +174,7 @@ class UserInfo {
   String? get cvURL => _cvURL;
   String? get facebookURL => _facebookURL;
   String? get linkinURL => _linkinURL;
+  String? get githubURL => _githubURL;
   String? get mailto => _mailto;
 
   Map<String, dynamic> toJson() {
@@ -195,6 +202,7 @@ class UserInfo {
     map['cvURL'] = _cvURL;
     map['facebookURL'] = _facebookURL;
     map['linkinURL'] = _linkinURL;
+    map['githubURL'] = _githubURL;
     map['mailto'] = _mailto;
     return map;
   }

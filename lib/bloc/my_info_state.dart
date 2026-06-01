@@ -1,5 +1,12 @@
 part of 'my_info_bloc.dart';
 
+enum LoadingState{
+  initial,
+  loading,
+  loaded,
+  err
+}
+
 @JsonSerializable()
 class MyInfoState extends Equatable {
   final UserInfo? userInfo;

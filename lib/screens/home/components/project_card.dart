@@ -1,156 +1,205 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_profile/components/glass_tech_card.dart';
 import 'package:my_profile/models/my_project.dart';
+import 'package:my_profile/screens/home/components/project_details_dialog.dart';
 
-import '../../../constants.dart';
+import '../../../core/app_colors.dart';
 
-class ProjectCard extends StatelessWidget {
+class ProjectCard extends StatefulWidget {
   const ProjectCard({
-    Key? key,
+    super.key,
     required this.project,
-  }) : super(key: key);
+    this.allProjects = const [],
+    this.index = 0,
+  });
 
   final MyProject project;
+  final List<MyProject> allProjects;
+  final int index;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(defaultPadding),
-      color: secondaryColor,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _ItemTitle(
-              title: project.name ?? '',
-              time: '${project.startTime}-${project.endTime}',
+  State<ProjectCard> createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends State<ProjectCard> {
+  bool _isHovered = false;
+
+  void _showProjectDetails() {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: true,
+        barrierColor: Colors.black.withValues(alpha: 0.9),
+        transitionDuration: const Duration(milliseconds: 600),
+        reverseTransitionDuration: const Duration(milliseconds: 400),
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return ProjectStackDialog(
+            projects: widget.allProjects.isNotEmpty
+                ? widget.allProjects
+                : [widget.project],
+            initialIndex: widget.index,
+          );
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final curve =
+              CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic);
+          return FadeTransition(
+            opacity: curve,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.9, end: 1.0).animate(curve),
+              child: child,
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            _ItemInfo(
-              title: 'Company',
-              info: project.company ?? "",
-            ),
-            _ItemInfo(
-              title: 'Role',
-              info: project.role ?? "",
-            ),
-            _ItemInfoList(
-              title: 'Tech used',
-              moreInfo: project.techUsed ?? [],
-            ),
-            _ItemInfoList(
-              title: 'Dependencies',
-              moreInfo: project.dependencies ?? [],
-            ),
-            _ItemInfoList(
-              title: 'Tasks',
-              moreInfo: project.tasks ?? [],
-            ),
-            // TextButton(
-            //   onPressed: () {},
-            //   child: const Text(
-            //     "Read More >>",
-            //     style: TextStyle(color: primaryColor),
-            //   ),
-            // ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
-}
 
-class _ItemTitle extends StatelessWidget {
-  const _ItemTitle({required this.title, required this.time});
-  final String title;
-  final String time;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: AutoSizeText(
-            title,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall!
-                .copyWith(color: Colors.amber),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: _showProjectDetails,
+        child: Hero(
+          tag: widget.project.id ?? '',
+          child: GlassTechCard(
+            isHovered: _isHovered,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          widget.project.name?.toUpperCase() ?? "PROJECT_NAME",
+                          style: GoogleFonts.shareTechMono(
+                            color: AppColors.primary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            shadows: _isHovered
+                                ? [
+                                    Shadow(
+                                        color: AppColors.primary
+                                            .withValues(alpha: 0.5),
+                                        blurRadius: 10)
+                                  ]
+                                : [],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        widget.project.startTime?.split('/').last ?? "202X",
+                        style: GoogleFonts.shareTechMono(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "// ${widget.project.role?.toUpperCase()}",
+                    style: GoogleFonts.shareTechMono(
+                      color: AppColors.accentYellow.withValues(alpha: 0.7),
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSectionTitle("TECH_STACK"),
+                          const SizedBox(height: 8),
+                          _buildShortList(widget.project.techUsed ?? []),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "OPEN_LOG",
+                          style: GoogleFonts.shareTechMono(
+                            fontSize: 10,
+                            color: _isHovered
+                                ? AppColors.primary
+                                : AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 14,
+                          color: _isHovered
+                              ? AppColors.primary
+                              : AppColors.textSecondary,
+                        )
+                            .animate(target: _isHovered ? 1 : 0)
+                            .moveX(begin: -5, end: 0)
+                            .fadeIn(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-        Text(
-          time,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall!
-              .copyWith(color: Colors.amber),
-        )
-      ],
+      ),
+    ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1, end: 0);
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      "> $title",
+      style: GoogleFonts.shareTechMono(
+        color: AppColors.textSecondary,
+        fontSize: 10,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
-}
 
-class _ItemInfo extends StatelessWidget {
-  const _ItemInfo({required this.title, required this.info});
-  final String title;
-  final String info;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          "◦ $title: ",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(color: Colors.white),
-        ),
-        Expanded(
-          child: Text(
-            info,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: Colors.white),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class _ItemInfoList extends StatelessWidget {
-  const _ItemInfoList({required this.title, required this.moreInfo});
-  final String title;
-  final List<String> moreInfo;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "◦ $title: ",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(color: Colors.white),
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: moreInfo
-                .map((e) => Text(
-                      "* $e",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.white),
-                    ))
-                .toList(),
-          ),
-        )
-      ],
+  Widget _buildShortList(List<String> items) {
+    if (items.isEmpty) return const SizedBox.shrink();
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      children: items
+          .take(4)
+          .map((item) => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.2)),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                child: Text(
+                  item,
+                  style: GoogleFonts.shareTechMono(
+                      fontSize: 9,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold),
+                ),
+              ))
+          .toList(),
     );
   }
 }

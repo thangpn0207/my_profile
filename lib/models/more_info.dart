@@ -2,6 +2,7 @@
 /// userName : "thangpn0207"
 /// infoType : "Additional Information"
 /// details : ["I am a sociable person, able to communicate well.","I have an interest in technology, especially new technologies.","I am not afraid of difficulties, always try to find ways to solve difficult problems.","I always wanted to improve myself.","I was studious, easy to acquire new knowledge."]
+library;
 
 class MoreInfo {
   MoreInfo({

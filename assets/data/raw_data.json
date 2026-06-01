@@ -1,0 +1,387 @@
+{
+  "UserInfoModal": {
+    "id": "user_id_thangpn0207",
+    "userName": "thangpn0207",
+    "name": "Phạm Ngọc Thắng",
+    "role": "Senior Flutter Engineer // Windows & Smart Board",
+    "avatarURL": "",
+    "dob": "2000-07-02T08:00:00Z",
+    "exp": "2020-12-01T08:00:00Z",
+    "city": "Hà Nội",
+    "country": "Vietnam",
+    "university": "Greenwich University",
+    "universityRank": "First Class",
+    "coding": [
+      {
+        "percent": 0.95,
+        "name": "Flutter"
+      },
+      {
+        "percent": 0.95,
+        "name": "Dart"
+      },
+      {
+        "percent": 0.9,
+        "name": "Firebase"
+      },
+      {
+        "percent": 0.85,
+        "name": "ReactJs"
+      },
+      {
+        "percent": 0.85,
+        "name": "REST API"
+      },
+      {
+        "percent": 0.8,
+        "name": "Golang"
+      },
+      {
+        "percent": 0.8,
+        "name": "Java Spring Boot"
+      }
+    ],
+    "skills": [
+      {
+        "percent": 0.95,
+        "name": "Problem Solving"
+      },
+      {
+        "percent": 0.95,
+        "name": "Team Work"
+      },
+      {
+        "percent": 0.9,
+        "name": "Communication"
+      },
+      {
+        "percent": 0.9,
+        "name": "Leadership"
+      }
+    ],
+    "knowledge": [
+      {
+        "percent": 0.9,
+        "name": "Logical Thinking"
+      },
+      {
+        "percent": 0.9,
+        "name": "Object-Oriented Programming"
+      },
+      {
+        "percent": 0.9,
+        "name": "Analyzing Customer Requirements"
+      },
+      {
+        "percent": 0.85,
+        "name": "New Technological Knowledge"
+      },
+      {
+        "percent": 0.85,
+        "name": "Domain Expertise Development"
+      }
+    ],
+    "cvURL": "assets/data/CV-PhamNgocThang-Flutter Engineer.pdf",
+    "facebookURL": "https://www.facebook.com/thangpn272",
+    "linkinURL": "https://www.linkedin.com/in/thắng-phạm-4ba88720α",
+    "githubURL": "https://github.com/thangpn0207",
+    "mailto": "thangpn0207@gmail.com",
+    "phone": "0366946114"
+  },
+  "MyProjectModel": [
+    {
+      "id": "project_cmc_global_smart_board",
+      "userName": "thangpn0207",
+      "name": "Windows & Smart Board Ecosystem",
+      "company": "CMC GLOBAL",
+      "role": "Senior Flutter Engineer",
+      "techUsed": [
+        "Flutter",
+        "Dart",
+        "Windows Desktop",
+        "C++ Interop"
+      ],
+      "dependencies": [
+        "Win32 API",
+        "FFI",
+        "DART-FP",
+        "LOCAL SERVER"
+      ],
+      "tasks": [
+        "Developing large-scale ecosystem for Windows and Smart Board devices",
+        "Implementing high-performance desktop UI with complex system interactions",
+        "Managing hardware integration and cross-platform communication",
+        "Optimizing application performance for embedded smart board systems"
+      ],
+      "startTime": "11/2025",
+      "endTime": "Present"
+    },
+    {
+      "id": "project_authentic_education_hub",
+      "userName": "thangpn0207",
+      "name": "Authentic Education Hub – Multiple Apps",
+      "company": "Authentic education hub",
+      "role": "Flutter Engineer",
+      "techUsed": [
+        "Flutter",
+        "Agora",
+        "WebRTC",
+        "Firebase"
+      ],
+      "dependencies": [
+        "AGORA",
+        "WEBRTC",
+        "FIREBASE NOTIFICATION",
+        "FIREBASE",
+        "REST API"
+      ],
+      "tasks": [
+        "Developed 5+ mobile apps for education and e-commerce",
+        "Optimized mobile education/e-commerce apps serving thousands of users",
+        "Refactored legacy features and integrated complex backend APIs",
+        "Implemented real-time video calls using Agora and WebRTC",
+        "Managed push notification systems via Firebase",
+        "Resulted in significantly enhanced UX and active user growth"
+      ],
+      "startTime": "03/2025",
+      "endTime": null
+    },
+    {
+      "id": "project_tastech_asia",
+      "userName": "thangpn0207",
+      "name": "TasTech-Asia Projects",
+      "company": "Tastech-Asia",
+      "role": "Flutter Engineer",
+      "techUsed": [
+        "Flutter",
+        "ReactJs",
+        "Golang",
+        "Java"
+      ],
+      "dependencies": [
+        "TAILWIND",
+        "MONGODB",
+        "SPRING BOOT",
+        "RABBITMQ"
+      ],
+      "tasks": [
+        "Developed mobile and web solutions for Japanese and regional clients",
+        "Designed backend APIs and integrated various 3rd-party services",
+        "Delivered 6+ projects including PlanTour and Recago",
+        "Applied Agile/Scrum methodologies for project management",
+        "Collaborated on new features, quality assurance, and UX optimization"
+      ],
+      "startTime": "04/2023",
+      "endTime": "03/2025"
+    },
+    {
+      "id": "project_its_solution",
+      "userName": "thangpn0207",
+      "name": "ITS-Solution Projects",
+      "company": "ITS-Solution",
+      "role": "Flutter Developer / Sub-team Lead",
+      "techUsed": [
+        "Flutter"
+      ],
+      "dependencies": [
+        "BLOC",
+        "DIO",
+        "RETROFIT",
+        "FIREBASE",
+        "GOOGLE MAPS SDK",
+        "SNS LOGIN"
+      ],
+      "tasks": [
+        "Led Flutter sub-team, responsible for architecture and code reviews",
+        "Integrated social logins (Google, Facebook, Twitter) and push notifications",
+        "Launched multiple apps on Google Play & App Store",
+        "Participated in 4+ projects maintaining high quality and performance",
+        "Identified and resolved complex bugs and performance bottlenecks"
+      ],
+      "startTime": "07/2021",
+      "endTime": "04/2023"
+    },
+    {
+      "id": "project_icheck_product",
+      "userName": "thangpn0207",
+      "name": "ICheck Product Apps",
+      "company": "ICheck",
+      "role": "Flutter Developer (Intern -> Fresher)",
+      "techUsed": [
+        "Flutter"
+      ],
+      "dependencies": [
+        "BLOC",
+        "HTTPS",
+        "GETIT"
+      ],
+      "tasks": [
+        "Developed product-tracking and authentication applications",
+        "Implemented UI modules for login, registration, and user profiles",
+        "Collaborated with design teams for high-fidelity implementation",
+        "Fixed issues identified by QA and continuously improved app stability"
+      ],
+      "startTime": "12/2020",
+      "endTime": "07/2021"
+    },
+    {
+      "id": "project_plantour",
+      "userName": "thangpn0207",
+      "name": "PlanTour",
+      "company": "TasTech-Asia",
+      "role": "Full-stack developer",
+      "techUsed": [
+        "ReactJs",
+        "Java"
+      ],
+      "dependencies": [
+        "SPRING BOOT",
+        "TAILWIND"
+      ],
+      "tasks": [
+        "Developed web app for tour management",
+        "Converted designs to ReactJs code",
+        "Built robust Java APIs for client communication"
+      ],
+      "startTime": "08/2024",
+      "endTime": "03/2025"
+    },
+    {
+      "id": "project_recago",
+      "userName": "thangpn0207",
+      "name": "Recago",
+      "company": "TasTech-Asia",
+      "role": "Full-stack developer",
+      "techUsed": [
+        "Flutter",
+        "Golang"
+      ],
+      "dependencies": [
+        "DIO",
+        "GOOGLE MAP",
+        "MAPBOX",
+        "GETIT",
+        "FIREBASE NOTIFICATION",
+        "RABBITMQ"
+      ],
+      "tasks": [
+        "Developed e-commerce & photo sharing features",
+        "Converted UI designs to Flutter code",
+        "Built performant Golang APIs for client use"
+      ],
+      "startTime": "06/2023",
+      "endTime": "03/2024"
+    },
+    {
+      "id": "project_shorin_8_app",
+      "userName": "thangpn0207",
+      "name": "Shorin (8 apps)",
+      "company": "AtaraxiaDX",
+      "role": "Freelancer",
+      "techUsed": [
+        "Flutter"
+      ],
+      "dependencies": [
+        "GETX"
+      ],
+      "tasks": [
+        "Optimized event and photo contest applications",
+        "Fixed bugs and improved overall performance",
+        "Developed new features and uploaded apps to stores"
+      ],
+      "startTime": "09/2023",
+      "endTime": "12/2023"
+    },
+    {
+      "id": "project_xtrip",
+      "userName": "thangpn0207",
+      "name": "Xtrip",
+      "company": "TasTech-Asia",
+      "role": "Flutter developer",
+      "techUsed": [
+        "Flutter"
+      ],
+      "dependencies": [
+        "BLOC",
+        "DIO",
+        "FIREBASE NOTIFICATION",
+        "GOOGLE LOGIN",
+        "GOOGLE MAP"
+      ],
+      "tasks": [
+        "Maintained and improved the Xtrip mobile application",
+        "Identified and resolved bugs to ensure app stability",
+        "Developed new features requested by clients"
+      ],
+      "startTime": "04/2023",
+      "endTime": "03/2024"
+    },
+    {
+      "id": "project_airwater",
+      "userName": "thangpn0207",
+      "name": "AirWater",
+      "company": "ITS-Global",
+      "role": "Lead Flutter Team",
+      "techUsed": [
+        "Flutter"
+      ],
+      "dependencies": [
+        "BLOC",
+        "DIO",
+        "RETROFIT",
+        "FIREBASE AUTH",
+        "FIREBASE NOTIFICATION",
+        "GOOGLE MAP API"
+      ],
+      "tasks": [
+        "Led the Flutter development team for the AirWater project",
+        "Set up project base code and established architecture",
+        "Managed task assignments and conducted code reviews",
+        "Released builds for testers and successfully uploaded to Store"
+      ],
+      "startTime": "11/2022",
+      "endTime": "04/2023"
+    },
+    {
+      "id": "project_box_app",
+      "userName": "thangpn0207",
+      "name": "Box-App",
+      "company": "ITS-Global",
+      "role": "Lead Flutter Team",
+      "techUsed": [
+        "Flutter"
+      ],
+      "dependencies": [
+        "BLOC",
+        "DIO",
+        "RETROFIT",
+        "FIREBASE AUTH",
+        "FIREBASE NOTIFICATION"
+      ],
+      "tasks": [
+        "Managed development of the Box-App logistics solution",
+        "Implemented core UI and logic based on designs",
+        "Coordinated team efforts and ensured high code quality",
+        "Successfully released the application for client use"
+      ],
+      "startTime": "03/2022",
+      "endTime": "11/2022"
+    }
+  ],
+  "MoreInfoModel": {
+    "id": "moreinfo_id_thangpn0207",
+    "userName": "thangpn0207",
+    "infoType": "About Me & Personal Attributes",
+    "details": [
+      "Flutter & Full-stack Engineer with 4+ years of experience delivering scalable mobile and web applications.",
+      "Strong expertise in Flutter/Dart, Firebase, and API integration, with proficiency in ReactJS, Golang, and Java Spring Boot.",
+      "Successfully launched 10+ applications to App Store and Google Play, serving thousands of users across Japan and Southeast Asia.",
+      "Short-term goal: Thrive in a global environment and lead/mentor a strong development team.",
+      "Long-term goal: Transition into a leadership role (Tech Lead / Project Manager) to drive product strategy and team growth.",
+      "Interests include listening to music and reading books to broaden knowledge.",
+      "Fluent in Vietnamese with basic communication skills in English.",
+      "Passionate about building high-quality products that provide real value to users.",
+      "Aims to continuously learn and apply new technologies to solve complex problems."
+    ]
+  }
+}
