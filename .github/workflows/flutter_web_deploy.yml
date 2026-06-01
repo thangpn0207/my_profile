@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Generate dynamic build version
+        run: dart tool/generate_version.dart
+
       - name: Build Web
         run: flutter build web --release --base-href="/my_profile/"
 

@@ -1,9 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import 'package:my_profile/bloc/my_info_bloc.dart';
+import 'package:my_profile/components/glass_container.dart';
 import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
 
@@ -24,64 +27,69 @@ class _HomeBannerState extends State<HomeBanner> {
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     final isTablet = ResponsiveBreakpoints.of(context).isTablet;
 
-    return NotificationListener<ScrollNotification>(
-      onNotification: (notification) {
-        if (notification is ScrollUpdateNotification) {
-          setState(() {
-            _scrollOffset = notification.metrics.pixels;
-          });
-        }
-        return true;
-      },
-      child: LayoutBuilder(builder: (context, constraints) {
-        return Container(
-          width: double.infinity,
-          clipBehavior: Clip.antiAlias,
-          padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? 16 : AppDimensions.paddingL,
-            vertical: isMobile ? 40 : AppDimensions.paddingXXL,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.surface.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
-          ),
-          child: Stack(
-            children: [
-              // Parallax Background Icon
-              Positioned(
-                right: -50,
-                top: -50 + (_scrollOffset * 0.2),
-                child: Opacity(
-                  opacity: 0.05,
-                  child: Icon(Icons.code, size: 300, color: AppColors.primary),
-                ),
-              ),
+    return BlocBuilder<MyInfoBloc, MyInfoState>(
+      builder: (context, state) {
+        final userInfo = state.userInfo;
+        final name = userInfo?.name?.toUpperCase() ?? "PHẠM NGỌC THẮNG";
+        final role = userInfo?.role?.toUpperCase() ?? "SENIOR_FLUTTER_ENGINEER // WINDOWS_SMARTBOARD";
 
-              if (isMobile)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildTechAvatar(70),
-                    const SizedBox(height: 30),
-                    _buildIdentityInfo(context, true),
-                  ],
-                )
-              else
-                Row(
-                  children: [
-                    Transform.translate(
-                      offset: Offset(0, _scrollOffset * 0.1),
-                      child: _buildTechAvatar(isTablet ? 90 : 120),
+        return NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            if (notification is ScrollUpdateNotification) {
+              setState(() {
+                _scrollOffset = notification.metrics.pixels;
+              });
+            }
+            return true;
+          },
+          child: LayoutBuilder(builder: (context, constraints) {
+            return GlassContainer(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 16 : AppDimensions.paddingL,
+                vertical: isMobile ? 40 : AppDimensions.paddingXXL,
+              ),
+              borderRadius: 12.0,
+              opacity: 0.3,
+              boxBorder: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
+              child: Stack(
+                children: [
+                  // Parallax Background Icon
+                  Positioned(
+                    right: -50,
+                    top: -50 + (_scrollOffset * 0.2),
+                    child: Opacity(
+                      opacity: 0.05,
+                      child: Icon(Icons.code, size: 300, color: AppColors.primary),
                     ),
-                    SizedBox(width: isTablet ? 30 : 60),
-                    Expanded(child: _buildIdentityInfo(context, false)),
-                  ],
-                ),
-            ],
-          ),
-        ).animate().fadeIn(duration: 800.ms);
-      }),
+                  ),
+
+                  if (isMobile)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildTechAvatar(70),
+                        const SizedBox(height: 30),
+                        _buildIdentityInfo(context, true, name, role),
+                      ],
+                    )
+                  else
+                    Row(
+                      children: [
+                        Transform.translate(
+                          offset: Offset(0, _scrollOffset * 0.1),
+                          child: _buildTechAvatar(isTablet ? 90 : 120),
+                        ),
+                        SizedBox(width: isTablet ? 30 : 60),
+                        Expanded(child: _buildIdentityInfo(context, false, name, role)),
+                      ],
+                    ),
+                ],
+              ),
+            ).animate().fadeIn(duration: 800.ms);
+          }),
+        );
+      },
     );
   }
 
@@ -204,7 +212,7 @@ class _HomeBannerState extends State<HomeBanner> {
     );
   }
 
-  Widget _buildIdentityInfo(BuildContext context, bool isMobile) {
+  Widget _buildIdentityInfo(BuildContext context, bool isMobile, String name, String role) {
     return Column(
       crossAxisAlignment:
           isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
@@ -238,7 +246,7 @@ class _HomeBannerState extends State<HomeBanner> {
         ).animate().fadeIn(delay: 200.ms),
         const SizedBox(height: 16),
         Text(
-          "PHẠM NGỌC THẮNG",
+          name,
           textAlign: isMobile ? TextAlign.center : TextAlign.start,
           style: GoogleFonts.shareTechMono(
             fontSize: isMobile ? 28 : 52,
@@ -255,7 +263,7 @@ class _HomeBannerState extends State<HomeBanner> {
         ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.05, end: 0),
         const SizedBox(height: 12),
         Text(
-          "SENIOR_FLUTTER_ENGINEER // WINDOWS_SMARTBOARD",
+          role,
           textAlign: isMobile ? TextAlign.center : TextAlign.start,
           style: GoogleFonts.shareTechMono(
             fontSize: isMobile ? 12 : 18,

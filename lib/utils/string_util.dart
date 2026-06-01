@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-final DateFormat dateFormatterMDY = DateFormat('MM/dd/yyyy');
+final DateFormat dateFormatterMDY = DateFormat('dd/MM/yyyy');
 
 extension ExtString on String? {
   DateTime? convertToDateTime() {

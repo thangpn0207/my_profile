@@ -21,9 +21,9 @@ class RecommendationCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.surface.withOpacity(0.5),
+        color: AppColors.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +53,7 @@ class RecommendationCard extends StatelessWidget {
                       child: Text(
                         detail,
                         style: GoogleFonts.shareTechMono(
-                          color: AppColors.textPrimary.withOpacity(0.9),
+                          color: AppColors.textPrimary.withValues(alpha: 0.9),
                           fontSize: 14,
                           height: 1.5,
                         ),

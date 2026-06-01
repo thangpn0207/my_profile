@@ -30,7 +30,7 @@ class AnimatedCounter extends StatelessWidget {
                       color: color,
                       shadows: [
                         Shadow(
-                          color: color!.withOpacity(0.6),
+                          color: color!.withValues(alpha: 0.6),
                           blurRadius: 16,
                           offset: Offset(0, 4),
                         ),

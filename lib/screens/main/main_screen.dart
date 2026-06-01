@@ -6,6 +6,7 @@ import 'package:my_profile/bloc/my_info_bloc.dart';
 import 'package:my_profile/components/tech_grid_background.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import 'package:my_profile/components/glass_container.dart';
 import '../../core/app_colors.dart';
 import 'components/side_menu.dart';
 
@@ -146,7 +147,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             const SizedBox(height: 40),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () => context.read<MyInfoBloc>().add(OnInit()),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppColors.error),
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
@@ -193,24 +194,12 @@ class _MainScreenState extends State<MainScreen> {
           if (isDesktop)
             Expanded(
               flex: 3,
-              child: Container(
+              child: GlassContainer(
                 margin: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: AppColors.surface.withValues(alpha: 0.8),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.6),
-                      blurRadius: 40,
-                      offset: const Offset(0, 15),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: SideMenu(),
-                ),
+                borderRadius: 12.0,
+                opacity: 0.6,
+                boxBorder: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
+                child: SideMenu(),
               )
                   .animate()
                   .slideX(begin: -0.2, end: 0, duration: 600.ms, curve: Curves.easeOutCubic)

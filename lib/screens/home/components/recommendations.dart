@@ -25,7 +25,7 @@ class AboutMe extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                AppColors.primary.withOpacity(0.1),
+                AppColors.primary.withValues(alpha: 0.1),
                 Colors.transparent,
               ],
               begin: Alignment.centerLeft,

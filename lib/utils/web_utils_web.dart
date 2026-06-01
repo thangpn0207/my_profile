@@ -1,9 +1,12 @@
 // web_utils_web.dart
-import 'dart:js' as js;
+import 'dart:js_interop';
+
+@JS('removeLoader')
+external void _removeLoader();
 
 void removeNativeLoader() {
   try {
-    js.context.callMethod('removeLoader');
+    _removeLoader();
   } catch (e) {
     // Ignore if function not found
   }

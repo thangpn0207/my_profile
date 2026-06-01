@@ -8,6 +8,7 @@ import 'package:my_profile/core/app_colors.dart';
 import 'package:my_profile/models/user_info.dart';
 import 'package:my_profile/utils/string_util.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
 import 'area_info_text.dart';
 import 'coding.dart';
@@ -30,7 +31,7 @@ class SideMenu extends StatelessWidget {
           final userInfo = state.userInfo;
           return Column(
             children: [
-              const MyInfo(),
+              MyInfo(userInfo: userInfo),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -92,29 +93,33 @@ class SideMenu extends StatelessWidget {
   }
 
   Widget _buildDownloadButton(BuildContext context, String cvUrl) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: TextButton(
-        onPressed: () => cvUrl.isNotEmpty ? _launchUrl(cvUrl) : null,
-        style: TextButton.styleFrom(padding: const EdgeInsets.all(16)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "MY_CV.PDF",
-              style: GoogleFonts.shareTechMono(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
+    return LiquidStretch(
+      stretch: 0.4,
+      resistance: 0.05,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: TextButton(
+          onPressed: () => cvUrl.isNotEmpty ? _launchUrl(cvUrl) : null,
+          style: TextButton.styleFrom(padding: const EdgeInsets.all(16)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "MY_CV.PDF",
+                style: GoogleFonts.shareTechMono(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            const Icon(Icons.download, color: AppColors.primary, size: 18),
-          ],
+              const SizedBox(width: 12),
+              const Icon(Icons.download, color: AppColors.primary, size: 18),
+            ],
+          ),
         ),
       ),
     );
