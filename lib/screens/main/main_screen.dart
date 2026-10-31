@@ -22,6 +22,14 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<double> _parallax = ValueNotifier(0);
+  // Spotlight position in grid-painter space (see _setPointer).
+  final ValueNotifier<Offset?> _pointer = ValueNotifier(null);
+  // Never updated: used when the spotlight is disabled.
+  final ValueNotifier<Offset?> _noPointer = ValueNotifier(null);
+
+  // The grid is translated by -parallax*0.15, so painter y = screen y + parallax*0.15.
+  void _setPointer(Offset? screenPos) => _pointer.value =
+      screenPos == null ? null : screenPos + Offset(0, _parallax.value * 0.15);
 
   @override
   void initState() {
@@ -35,6 +43,8 @@ class _MainScreenState extends State<MainScreen> {
   void dispose() {
     _scrollController.dispose();
     _parallax.dispose();
+    _pointer.dispose();
+    _noPointer.dispose();
     super.dispose();
   }
 
@@ -42,35 +52,47 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<MyInfoBloc, MyInfoState>(
       builder: (context, state) {
+        final spotlight = ResponsiveBreakpoints.of(context).isDesktop &&
+            !MediaQuery.disableAnimationsOf(context);
         return Scaffold(
           backgroundColor: AppColors.background,
-          body: Stack(
-            children: [
-              // Enhanced Parallax Tech Grid
-              ValueListenableBuilder<double>(
-                valueListenable: _parallax,
-                child: const TechGridBackground(),
-                builder: (context, offset, child) => Transform.translate(
-                  offset: Offset(0, -(offset * 0.15)),
-                  child: child,
+          body: MouseRegion(
+            onHover: (e) {
+              if (spotlight) _setPointer(e.localPosition);
+            },
+            onExit: (_) {
+              if (spotlight) _setPointer(null);
+            },
+            child: Stack(
+              children: [
+                // Enhanced Parallax Tech Grid
+                ValueListenableBuilder<double>(
+                  valueListenable: _parallax,
+                  child: TechGridBackground(
+                      pointer: spotlight ? _pointer : _noPointer),
+                  builder: (context, offset, child) => Transform.translate(
+                    offset: Offset(0, -(offset * 0.15)),
+                    child: child,
+                  ),
                 ),
-              ),
 
-              AnimatedSwitcher(
-                duration: 800.ms,
-                switchInCurve: Curves.easeInOut,
-                switchOutCurve: Curves.easeInOut,
-                layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) {
-                  return Stack(
-                    children: <Widget>[
-                      ...previousChildren,
-                      if (currentChild != null) currentChild,
-                    ],
-                  );
-                },
-                child: _buildChildByState(context, state),
-              ),
-            ],
+                AnimatedSwitcher(
+                  duration: 800.ms,
+                  switchInCurve: Curves.easeInOut,
+                  switchOutCurve: Curves.easeInOut,
+                  layoutBuilder:
+                      (Widget? currentChild, List<Widget> previousChildren) {
+                    return Stack(
+                      children: <Widget>[
+                        ...previousChildren,
+                        if (currentChild != null) currentChild,
+                      ],
+                    );
+                  },
+                  child: _buildChildByState(context, state),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -124,7 +146,8 @@ class _MainScreenState extends State<MainScreen> {
               width: 250,
               child: LinearProgressIndicator(
                 backgroundColor: AppColors.surface,
-                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                valueColor:
+                    const AlwaysStoppedAnimation<Color>(AppColors.primary),
               ),
             ).animate().fadeIn(delay: 400.ms),
           ],
@@ -146,16 +169,19 @@ class _MainScreenState extends State<MainScreen> {
             const SizedBox(height: 20),
             Text(
               'FATAL_ERROR: DATA_INITIALIZATION_FAILED',
-              style: GoogleFonts.shareTechMono(color: AppColors.error, fontSize: 18),
+              style: GoogleFonts.shareTechMono(
+                  color: AppColors.error, fontSize: 18),
             ),
             const SizedBox(height: 40),
             OutlinedButton(
               onPressed: () => context.read<MyInfoBloc>().add(OnInit()),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppColors.error),
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
               ),
-              child: Text('REBOOT', style: GoogleFonts.shareTechMono(color: AppColors.error)),
+              child: Text('REBOOT',
+                  style: GoogleFonts.shareTechMono(color: AppColors.error)),
             ),
           ],
         ),
@@ -183,11 +209,13 @@ class _MainScreenState extends State<MainScreen> {
               ),
               title: Text(
                 'PROFILE_OS v4.0',
-                style: GoogleFonts.shareTechMono(color: AppColors.primary, fontSize: 14),
+                style: GoogleFonts.shareTechMono(
+                    color: AppColors.primary, fontSize: 14),
               ),
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(1),
-                child: Container(color: AppColors.primary.withValues(alpha: 0.1), height: 1),
+                child: Container(
+                    color: AppColors.primary.withValues(alpha: 0.1), height: 1),
               ),
             ),
       drawer: isDesktop ? null : SideMenu(),
@@ -201,11 +229,16 @@ class _MainScreenState extends State<MainScreen> {
                 margin: const EdgeInsets.all(20),
                 borderRadius: 12.0,
                 opacity: 0.6,
-                boxBorder: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
+                boxBorder: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.15)),
                 child: SideMenu(),
               )
                   .animate()
-                  .slideX(begin: -0.2, end: 0, duration: 600.ms, curve: Curves.easeOutCubic)
+                  .slideX(
+                      begin: -0.2,
+                      end: 0,
+                      duration: 600.ms,
+                      curve: Curves.easeOutCubic)
                   .fadeIn(),
             ),
           Expanded(
@@ -222,7 +255,10 @@ class _MainScreenState extends State<MainScreen> {
                   ...widget.children.map((child) => Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: child,
-                      ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.05, end: 0)),
+                      )
+                          .animate()
+                          .fadeIn(duration: 600.ms)
+                          .slideY(begin: 0.05, end: 0)),
                   const SizedBox(height: 60),
                   _buildFooter(),
                 ],
@@ -240,20 +276,22 @@ class _MainScreenState extends State<MainScreen> {
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.4),
-        border: Border(top: BorderSide(color: AppColors.primary.withValues(alpha: 0.1))),
+        border: Border(
+            top: BorderSide(color: AppColors.primary.withValues(alpha: 0.1))),
       ),
       child: Column(
         children: [
           Text(
             'DESIGNED_BY // PHAM_NGOC_THANG',
-            style:
-                GoogleFonts.shareTechMono(color: AppColors.primary, fontSize: 14, letterSpacing: 2),
+            style: GoogleFonts.shareTechMono(
+                color: AppColors.primary, fontSize: 14, letterSpacing: 2),
           ),
           const SizedBox(height: 12),
           Text(
             'BUILT_WITH_FLUTTER_AND_PASSION © 2026',
             style: GoogleFonts.shareTechMono(
-                color: AppColors.textSecondary.withValues(alpha: 0.6), fontSize: 10),
+                color: AppColors.textSecondary.withValues(alpha: 0.6),
+                fontSize: 10),
           ),
         ],
       ),

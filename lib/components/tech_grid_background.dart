@@ -1,9 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../core/app_colors.dart';
 
 class TechGridBackground extends StatefulWidget {
-  const TechGridBackground({super.key});
+  const TechGridBackground({super.key, required this.pointer});
+
+  /// Pointer position in this widget's local (painter) coordinates, or null.
+  final ValueListenable<Offset?> pointer;
 
   @override
   State<TechGridBackground> createState() => _TechGridBackgroundState();
@@ -33,10 +37,10 @@ class _TechGridBackgroundState extends State<TechGridBackground>
     // Wrapped in RepaintBoundary for performance
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _controller,
+        animation: Listenable.merge([_controller, widget.pointer]),
         builder: (context, child) {
           return CustomPaint(
-            painter: GridPainter(_controller.value),
+            painter: GridPainter(_controller.value, widget.pointer.value),
             child: Container(),
           );
         },
@@ -47,7 +51,8 @@ class _TechGridBackgroundState extends State<TechGridBackground>
 
 class GridPainter extends CustomPainter {
   final double animationValue;
-  GridPainter(this.animationValue);
+  final Offset? pointer;
+  GridPainter(this.animationValue, this.pointer);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -58,22 +63,44 @@ class GridPainter extends CustomPainter {
     const spacing = 40.0;
     final offset = animationValue * spacing;
 
-    // Draw vertical lines
-    for (double i = -spacing; i < size.width + spacing; i += spacing) {
-      canvas.drawLine(
-        Offset(i + (offset % spacing), 0),
-        Offset(i + (offset % spacing), size.height),
-        paint,
-      );
+    void drawGrid(Paint p) {
+      for (double i = -spacing; i < size.width + spacing; i += spacing) {
+        canvas.drawLine(
+          Offset(i + (offset % spacing), 0),
+          Offset(i + (offset % spacing), size.height),
+          p,
+        );
+      }
+      for (double i = -spacing; i < size.height + spacing; i += spacing) {
+        canvas.drawLine(
+          Offset(0, i + (offset % spacing)),
+          Offset(size.width, i + (offset % spacing)),
+          p,
+        );
+      }
     }
 
-    // Draw horizontal lines
-    for (double i = -spacing; i < size.height + spacing; i += spacing) {
-      canvas.drawLine(
-        Offset(0, i + (offset % spacing)),
-        Offset(size.width, i + (offset % spacing)),
-        paint,
+    drawGrid(paint);
+
+    final pointer = this.pointer;
+    if (pointer != null) {
+      const radius = 250.0;
+      final rect = Rect.fromCircle(center: pointer, radius: radius);
+      canvas.drawCircle(
+        pointer,
+        radius,
+        Paint()
+          ..shader = RadialGradient(colors: [
+            AppColors.primary.withValues(alpha: 0.08),
+            AppColors.primary.withValues(alpha: 0),
+          ]).createShader(rect),
       );
+      canvas.save();
+      canvas.clipPath(Path()..addOval(rect));
+      drawGrid(Paint()
+        ..color = AppColors.primary.withValues(alpha: 0.18)
+        ..strokeWidth = 1.0);
+      canvas.restore();
     }
 
     // Add subtle glow spots
@@ -91,5 +118,6 @@ class GridPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant GridPainter oldDelegate) =>
-      oldDelegate.animationValue != animationValue;
+      oldDelegate.animationValue != animationValue ||
+      oldDelegate.pointer != pointer;
 }
