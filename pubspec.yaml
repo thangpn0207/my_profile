@@ -59,9 +59,6 @@ dependencies:
   flutter_animate: ^4.5.0
 
 
-  # Add web package to fix compilation issues
-  web: ^1.1.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

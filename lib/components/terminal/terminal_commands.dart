@@ -82,8 +82,10 @@ TerminalResult runCommand(String input, TerminalContext ctx) {
     case 'clear':
       return const TerminalResult(clear: true);
     case 'about':
-      return const TerminalResult(
-          lines: ['scrolling to About...'], navigateTo: Section.about);
+      return TerminalResult(lines: [
+        for (final m in ctx.moreInfos) ...?m.details,
+        'scrolling to About...',
+      ], navigateTo: Section.about);
     case 'projects':
       return TerminalResult(
         lines: ctx.projects.isEmpty

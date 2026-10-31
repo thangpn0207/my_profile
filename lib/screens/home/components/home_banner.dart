@@ -40,7 +40,7 @@ class HomeBanner extends StatelessWidget {
                 Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
             child: Stack(
               children: [
-                // Parallax Background Icon
+                // Decorative background icon
                 Positioned(
                   right: -50,
                   top: -50,

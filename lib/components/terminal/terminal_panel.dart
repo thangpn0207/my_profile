@@ -6,9 +6,9 @@ import 'package:my_profile/bloc/my_info_bloc.dart';
 import 'package:my_profile/components/glass_container.dart';
 import 'package:my_profile/components/terminal/terminal_commands.dart';
 import 'package:my_profile/core/app_colors.dart';
+import 'package:my_profile/core/open_url.dart';
 import 'package:my_profile/core/sections.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const _chips = ['help', 'projects', 'skills', 'contact', 'cv'];
 
@@ -35,18 +35,6 @@ class _TerminalPanelState extends State<TerminalPanel> {
     super.dispose();
   }
 
-  Future<void> _open(String url) async {
-    var s = url;
-    if (!s.startsWith('http') && !s.startsWith('mailto') && !s.startsWith('tel')) {
-      // Same approach as side_menu: resolve relative assets against Uri.base.
-      final base = Uri.base.toString().split('?').first.split('#').first;
-      s = base.endsWith('/') ? '$base$s' : '$base/$s';
-    }
-    try {
-      await launchUrl(Uri.parse(s));
-    } catch (_) {}
-  }
-
   void _run(String input) {
     final text = input.trim();
     _controller.clear();
@@ -63,7 +51,9 @@ class _TerminalPanelState extends State<TerminalPanel> {
       if (r.clear) {
         _lines.clear();
       } else {
-        _lines..add('\$ $text')..addAll(r.lines);
+        _lines
+          ..add('\$ $text')
+          ..addAll(r.lines);
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -72,11 +62,11 @@ class _TerminalPanelState extends State<TerminalPanel> {
       }
     });
     if (r.navigateTo != null) scrollToSection(r.navigateTo!);
-    if (r.openUrl != null) _open(r.openUrl!);
+    if (r.openUrl != null) openUrl(r.openUrl!);
   }
 
-  void _setText(String t) => _controller.value =
-      TextEditingValue(text: t, selection: TextSelection.collapsed(offset: t.length));
+  void _setText(String t) => _controller.value = TextEditingValue(
+      text: t, selection: TextSelection.collapsed(offset: t.length));
 
   KeyEventResult _onKey(FocusNode _, KeyEvent e) {
     if (e is KeyUpEvent) return KeyEventResult.ignored;
@@ -101,7 +91,8 @@ class _TerminalPanelState extends State<TerminalPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final mono = GoogleFonts.shareTechMono(color: AppColors.textPrimary, fontSize: 14);
+    final mono =
+        GoogleFonts.shareTechMono(color: AppColors.textPrimary, fontSize: 14);
     final isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return GlassContainer(
       height: isMobile ? 220 : 260,
@@ -126,13 +117,16 @@ class _TerminalPanelState extends State<TerminalPanel> {
             child: ListView.builder(
               controller: _scroll,
               itemCount: _lines.length,
-              itemBuilder: (_, i) => Text(_lines[i], style: mono, softWrap: true),
+              itemBuilder: (_, i) =>
+                  Text(_lines[i], style: mono, softWrap: true),
             ),
           ),
           Wrap(spacing: 8, children: [
             for (final c in _chips)
               ActionChip(
                 label: Text(c, style: mono.copyWith(fontSize: 12)),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
                 onPressed: () => _run(c),
               ),
           ]),
@@ -147,10 +141,24 @@ class _TerminalPanelState extends State<TerminalPanel> {
                 _focus.requestFocus();
               },
               decoration: InputDecoration(
-                prefixText: '\$ ',
-                prefixStyle: mono.copyWith(color: AppColors.primary),
                 isDense: true,
-                border: InputBorder.none,
+                hintText: "type 'help'  ·  ⌘K / Ctrl+K to jump",
+                hintStyle: mono.copyWith(color: AppColors.textSecondary),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 6),
+                  child: Text('\$',
+                      style: mono.copyWith(color: AppColors.primary)),
+                ),
+                prefixIconConstraints: const BoxConstraints(),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: AppColors.primary.withValues(alpha: 0.25)),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
               ),
             ),
           ),

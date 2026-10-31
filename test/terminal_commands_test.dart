@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_profile/components/terminal/terminal_commands.dart';
 import 'package:my_profile/core/sections.dart';
+import 'package:my_profile/models/more_info.dart';
 import 'package:my_profile/models/my_project.dart';
 import 'package:my_profile/models/user_info.dart';
 
@@ -43,7 +44,20 @@ void main() {
   });
 
   test('about navigates', () {
-    expect(runCommand('about', ctx).navigateTo, Section.about);
+    final r = runCommand(
+        'about',
+        TerminalContext(
+          user: user,
+          moreInfos: [
+            MoreInfo.fromJson({
+              'title': 'Me',
+              'details': ['I like Dart']
+            })
+          ],
+        ));
+    expect(r.navigateTo, Section.about);
+    expect(r.lines, contains('I like Dart'));
+    expect(r.lines.last, 'scrolling to About...');
   });
 
   test('skills bars', () {
@@ -88,8 +102,8 @@ void main() {
   });
 
   test('unknown command', () {
-    expect(runCommand('foo', ctx).lines,
-        ["command not found: foo. Type 'help'."]);
+    expect(
+        runCommand('foo', ctx).lines, ["command not found: foo. Type 'help'."]);
   });
 
   test('null user', () {

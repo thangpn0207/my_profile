@@ -24,7 +24,10 @@ class _GlitchTextState extends State<GlitchText>
     super.didChangeDependencies();
     if (!_started) {
       _started = true;
-      if (!MediaQuery.disableAnimationsOf(context)) _c.forward(from: 0);
+      if (ResponsiveBreakpoints.of(context).isDesktop &&
+          !MediaQuery.disableAnimationsOf(context)) {
+        _c.forward(from: 0);
+      }
     }
   }
 

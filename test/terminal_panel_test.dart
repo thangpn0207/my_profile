@@ -42,6 +42,11 @@ void main() {
     ));
   }
 
+  testWidgets('input hint visible before focus', (t) async {
+    await pump(t);
+    expect(find.text("type 'help'  ·  ⌘K / Ctrl+K to jump"), findsOneWidget);
+  });
+
   testWidgets('typing help prints commands', (t) async {
     await pump(t);
     await t.enterText(find.byType(TextField), 'help');
