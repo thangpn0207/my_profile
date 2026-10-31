@@ -1,9 +1,12 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_profile/components/glass_tech_card.dart';
 import 'package:my_profile/models/my_project.dart';
 import 'package:my_profile/screens/home/components/project_details_dialog.dart';
+
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../core/app_colors.dart';
 
@@ -25,6 +28,16 @@ class ProjectCard extends StatefulWidget {
 
 class _ProjectCardState extends State<ProjectCard> {
   bool _isHovered = false;
+  Offset _tilt = Offset.zero; // dx, dy in [-1, 1]
+
+  void _onHover(PointerHoverEvent e) {
+    final size = context.size;
+    if (size == null || size.isEmpty) return;
+    setState(() => _tilt = Offset(
+          (e.localPosition.dx / size.width * 2 - 1).clamp(-1.0, 1.0),
+          (e.localPosition.dy / size.height * 2 - 1).clamp(-1.0, 1.0),
+        ));
+  }
 
   void _showProjectDetails() {
     Navigator.of(context).push(
@@ -59,104 +72,123 @@ class _ProjectCardState extends State<ProjectCard> {
 
   @override
   Widget build(BuildContext context) {
+    final tiltOn = ResponsiveBreakpoints.of(context).isDesktop &&
+        !MediaQuery.disableAnimationsOf(context);
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: _showProjectDetails,
-        child: Hero(
-          tag: widget.project.id ?? '',
-          child: GlassTechCard(
-            isHovered: _isHovered,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          widget.project.name?.toUpperCase() ?? "PROJECT_NAME",
-                          style: GoogleFonts.shareTechMono(
-                            color: AppColors.primary,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            shadows: _isHovered
-                                ? [
-                                    Shadow(
-                                        color: AppColors.primary
-                                            .withValues(alpha: 0.5),
-                                        blurRadius: 10)
-                                  ]
-                                : [],
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Text(
-                        widget.project.startTime?.split('/').last ?? "202X",
-                        style: GoogleFonts.shareTechMono(
-                          color: AppColors.textSecondary,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    "// ${widget.project.role?.toUpperCase()}",
-                    style: GoogleFonts.shareTechMono(
-                      color: AppColors.accentYellow.withValues(alpha: 0.7),
-                      fontSize: 12,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildSectionTitle("TECH_STACK"),
-                          const SizedBox(height: 8),
-                          _buildShortList(widget.project.techUsed ?? []),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+      onHover: tiltOn ? _onHover : null,
+      onExit: (_) => setState(() {
+        _isHovered = false;
+        _tilt = Offset.zero;
+      }),
+      child: TweenAnimationBuilder<Offset>(
+        tween: Tween(end: tiltOn ? _tilt : Offset.zero),
+        duration: const Duration(milliseconds: 150),
+        builder: (context, t, child) => Transform(
+          alignment: Alignment.center,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..rotateX(-t.dy * 0.14)
+            ..rotateY(t.dx * 0.14),
+          child: child,
+        ),
+        child: GestureDetector(
+          onTap: _showProjectDetails,
+          child: Hero(
+            tag: widget.project.id ?? '',
+            child: GlassTechCard(
+              isHovered: _isHovered,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Expanded(
+                          child: Text(
+                            widget.project.name?.toUpperCase() ??
+                                "PROJECT_NAME",
+                            style: GoogleFonts.shareTechMono(
+                              color: AppColors.primary,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              shadows: _isHovered
+                                  ? [
+                                      Shadow(
+                                          color: AppColors.primary
+                                              .withValues(alpha: 0.5),
+                                          blurRadius: 10)
+                                    ]
+                                  : [],
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                         Text(
-                          "OPEN_LOG",
+                          widget.project.startTime?.split('/').last ?? "202X",
                           style: GoogleFonts.shareTechMono(
-                            fontSize: 10,
+                            color: AppColors.textSecondary,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      "// ${widget.project.role?.toUpperCase()}",
+                      style: GoogleFonts.shareTechMono(
+                        color: AppColors.accentYellow.withValues(alpha: 0.7),
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle("TECH_STACK"),
+                            const SizedBox(height: 8),
+                            _buildShortList(widget.project.techUsed ?? []),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "OPEN_LOG",
+                            style: GoogleFonts.shareTechMono(
+                              fontSize: 10,
+                              color: _isHovered
+                                  ? AppColors.primary
+                                  : AppColors.textSecondary,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(
+                            Icons.keyboard_arrow_right,
+                            size: 14,
                             color: _isHovered
                                 ? AppColors.primary
                                 : AppColors.textSecondary,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Icon(
-                          Icons.keyboard_arrow_right,
-                          size: 14,
-                          color: _isHovered
-                              ? AppColors.primary
-                              : AppColors.textSecondary,
-                        )
-                            .animate(target: _isHovered ? 1 : 0)
-                            .moveX(begin: -5, end: 0)
-                            .fadeIn(),
-                      ],
+                          )
+                              .animate(target: _isHovered ? 1 : 0)
+                              .moveX(begin: -5, end: 0)
+                              .fadeIn(),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

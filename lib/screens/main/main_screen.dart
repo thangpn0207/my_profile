@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
+import 'package:my_profile/components/command_palette.dart';
+import 'package:my_profile/components/matrix_rain_overlay.dart';
 import 'package:my_profile/components/tech_grid_background.dart';
+import 'package:my_profile/components/terminal/terminal_commands.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:my_profile/components/glass_container.dart';
@@ -31,9 +35,40 @@ class _MainScreenState extends State<MainScreen> {
   void _setPointer(Offset? screenPos) => _pointer.value =
       screenPos == null ? null : screenPos + Offset(0, _parallax.value * 0.15);
 
+  TerminalContext _termCtx = const TerminalContext();
+  int _konami = 0;
+  OverlayEntry? _rain;
+
+  bool _onKey(KeyEvent e) {
+    if (e is! KeyDownEvent || _rain != null) return false;
+    // Ignore while the user types in a text field (e.g. the terminal).
+    final typing = FocusManager.instance.primaryFocus?.context
+            ?.findAncestorWidgetOfExactType<EditableText>() !=
+        null;
+    if (typing) return false;
+    _konami = konamiAdvance(_konami, e.logicalKey);
+    if (_konami == 10) {
+      _konami = 0;
+      if (!MediaQuery.disableAnimationsOf(context)) {
+        final entry = OverlayEntry(
+          builder: (_) => MatrixRainOverlay(onDone: _removeRain),
+        );
+        _rain = entry;
+        Overlay.of(context).insert(entry);
+      }
+    }
+    return false;
+  }
+
+  void _removeRain() {
+    _rain?.remove();
+    _rain = null;
+  }
+
   @override
   void initState() {
     super.initState();
+    HardwareKeyboard.instance.addHandler(_onKey);
     _scrollController.addListener(() {
       _parallax.value = _scrollController.offset;
     });
@@ -41,6 +76,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void dispose() {
+    HardwareKeyboard.instance.removeHandler(_onKey);
+    _removeRain();
     _scrollController.dispose();
     _parallax.dispose();
     _pointer.dispose();
@@ -54,44 +91,61 @@ class _MainScreenState extends State<MainScreen> {
       builder: (context, state) {
         final spotlight = ResponsiveBreakpoints.of(context).isDesktop &&
             !MediaQuery.disableAnimationsOf(context);
-        return Scaffold(
-          backgroundColor: AppColors.background,
-          body: MouseRegion(
-            onHover: (e) {
-              if (spotlight) _setPointer(e.localPosition);
-            },
-            onExit: (_) {
-              if (spotlight) _setPointer(null);
-            },
-            child: Stack(
-              children: [
-                // Enhanced Parallax Tech Grid
-                ValueListenableBuilder<double>(
-                  valueListenable: _parallax,
-                  child: TechGridBackground(
-                      pointer: spotlight ? _pointer : _noPointer),
-                  builder: (context, offset, child) => Transform.translate(
-                    offset: Offset(0, -(offset * 0.15)),
-                    child: child,
-                  ),
-                ),
+        _termCtx = TerminalContext(
+          user: state.userInfo,
+          moreInfos: state.moreInfos,
+          projects: state.myProjects,
+        );
+        void openPalette() => showCommandPalette(context, _termCtx);
+        return CallbackShortcuts(
+          bindings: {
+            const SingleActivator(LogicalKeyboardKey.keyK, meta: true):
+                openPalette,
+            const SingleActivator(LogicalKeyboardKey.keyK, control: true):
+                openPalette,
+          },
+          child: Focus(
+            autofocus: true,
+            child: Scaffold(
+              backgroundColor: AppColors.background,
+              body: MouseRegion(
+                onHover: (e) {
+                  if (spotlight) _setPointer(e.localPosition);
+                },
+                onExit: (_) {
+                  if (spotlight) _setPointer(null);
+                },
+                child: Stack(
+                  children: [
+                    // Enhanced Parallax Tech Grid
+                    ValueListenableBuilder<double>(
+                      valueListenable: _parallax,
+                      child: TechGridBackground(
+                          pointer: spotlight ? _pointer : _noPointer),
+                      builder: (context, offset, child) => Transform.translate(
+                        offset: Offset(0, -(offset * 0.15)),
+                        child: child,
+                      ),
+                    ),
 
-                AnimatedSwitcher(
-                  duration: 800.ms,
-                  switchInCurve: Curves.easeInOut,
-                  switchOutCurve: Curves.easeInOut,
-                  layoutBuilder:
-                      (Widget? currentChild, List<Widget> previousChildren) {
-                    return Stack(
-                      children: <Widget>[
-                        ...previousChildren,
-                        if (currentChild != null) currentChild,
-                      ],
-                    );
-                  },
-                  child: _buildChildByState(context, state),
+                    AnimatedSwitcher(
+                      duration: 800.ms,
+                      switchInCurve: Curves.easeInOut,
+                      switchOutCurve: Curves.easeInOut,
+                      layoutBuilder: (Widget? currentChild,
+                          List<Widget> previousChildren) {
+                        return Stack(
+                          children: <Widget>[
+                            ...previousChildren,
+                            if (currentChild != null) currentChild,
+                          ],
+                        );
+                      },
+                      child: _buildChildByState(context, state),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         );
