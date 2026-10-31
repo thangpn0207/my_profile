@@ -40,6 +40,15 @@ void main() {
     expect(find.text('contact'), findsNothing);
   });
 
+  testWidgets('Enter runs the first match and closes', (tester) async {
+    await _open(tester);
+    await tester.enterText(find.byType(TextField), 'about');
+    await tester.pump();
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(find.byType(TextField), findsNothing);
+  });
+
   testWidgets('Esc closes', (tester) async {
     await _open(tester);
     await tester.sendKeyEvent(LogicalKeyboardKey.escape);
@@ -86,6 +95,11 @@ void main() {
         p = konamiAdvance(p, k);
       }
       expect(p, 10);
+    });
+    test('out-of-range progress is treated as 0', () {
+      expect(konamiAdvance(10, LogicalKeyboardKey.arrowUp), 1);
+      expect(konamiAdvance(-3, LogicalKeyboardKey.arrowUp), 1);
+      expect(konamiAdvance(99, LogicalKeyboardKey.keyX), 0);
     });
     test('wrong key resets; ArrowUp restarts at 1', () {
       expect(konamiAdvance(4, LogicalKeyboardKey.keyX), 0);

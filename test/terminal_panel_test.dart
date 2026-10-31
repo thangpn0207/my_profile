@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -54,5 +55,39 @@ void main() {
     await t.tap(find.widgetWithText(ActionChip, 'projects'));
     await t.pump();
     expect(find.text(r'$ projects'), findsOneWidget);
+  });
+
+  Future<void> submit(WidgetTester t, String v) async {
+    await t.enterText(find.byType(TextField), v);
+    await t.testTextInput.receiveAction(TextInputAction.done);
+    await t.pump();
+  }
+
+  String field(WidgetTester t) =>
+      t.widget<TextField>(find.byType(TextField)).controller!.text;
+
+  testWidgets('whoami without data says not loaded', (t) async {
+    await pump(t);
+    await submit(t, 'whoami');
+    expect(find.text('data not loaded yet'), findsOneWidget);
+  });
+
+  testWidgets('whitespace-only Enter adds nothing and clears field', (t) async {
+    await pump(t);
+    final before = find.byType(Text).evaluate().length;
+    await submit(t, '   ');
+    expect(find.byType(Text).evaluate().length, before);
+    expect(field(t), '');
+  });
+
+  testWidgets('ArrowUp/ArrowDown walk history', (t) async {
+    await pump(t);
+    await submit(t, 'help');
+    await t.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+    await t.pump();
+    expect(field(t), 'help');
+    await t.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+    await t.pump();
+    expect(field(t), '');
   });
 }

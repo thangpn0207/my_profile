@@ -20,6 +20,7 @@ const _konami = [
 
 /// Returns new progress; 10 means complete (caller resets to 0).
 int konamiAdvance(int progress, LogicalKeyboardKey key) {
+  if (progress < 0 || progress >= _konami.length) progress = 0;
   if (key == _konami[progress]) return progress + 1;
   return key == _konami[0] ? 1 : 0;
 }
@@ -73,6 +74,8 @@ class _RainPainter extends CustomPainter {
   static const _cell = 16.0;
   static const _glyphs = 'ｱｲｳｴｵｶｷｸｹｺ0123456789';
   static const _trail = 12;
+  // One painter per (glyph, trail shade): at most 22*12 entries.
+  static final _cache = <String, TextPainter>{};
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -90,16 +93,19 @@ class _RainPainter extends CustomPainter {
         final row = head - i;
         if (row < 0 || row >= rows) continue;
         final g = _glyphs[(c * 7 + row * 3 + tick ~/ 3) % _glyphs.length];
-        final tp = TextPainter(
-          text: TextSpan(
-            text: g,
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.primary.withValues(alpha: 1 - i / _trail),
-            ),
-          ),
-          textDirection: TextDirection.ltr,
-        )..layout();
+        final tp = _cache.putIfAbsent(
+            '$g$i',
+            () => TextPainter(
+                  text: TextSpan(
+                    text: g,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color:
+                          AppColors.primary.withValues(alpha: 1 - i / _trail),
+                    ),
+                  ),
+                  textDirection: TextDirection.ltr,
+                )..layout());
         tp.paint(canvas, Offset(c * _cell, row * _cell));
       }
     }
