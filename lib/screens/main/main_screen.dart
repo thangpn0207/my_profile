@@ -21,21 +21,20 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final ScrollController _scrollController = ScrollController();
-  double _parallaxOffset = 0;
+  final ValueNotifier<double> _parallax = ValueNotifier(0);
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(() {
-      setState(() {
-        _parallaxOffset = _scrollController.offset;
-      });
+      _parallax.value = _scrollController.offset;
     });
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _parallax.dispose();
     super.dispose();
   }
 
@@ -48,9 +47,13 @@ class _MainScreenState extends State<MainScreen> {
           body: Stack(
             children: [
               // Enhanced Parallax Tech Grid
-              Transform.translate(
-                offset: Offset(0, -(_parallaxOffset * 0.15)),
+              ValueListenableBuilder<double>(
+                valueListenable: _parallax,
                 child: const TechGridBackground(),
+                builder: (context, offset, child) => Transform.translate(
+                  offset: Offset(0, -(offset * 0.15)),
+                  child: child,
+                ),
               ),
 
               AnimatedSwitcher(

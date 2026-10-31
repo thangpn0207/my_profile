@@ -43,7 +43,6 @@ class MyInfoBloc extends HydratedBloc<MyInfoEvent, MyInfoState> {
       final UserInfo userInfo = data[0] as UserInfo;
       final List<MoreInfo> moreInfos = data[1] as List<MoreInfo>;
       final List<MyProject> myProjects = data[2] as List<MyProject>;
-      await Future.delayed(Duration(seconds: 5));
       // Emit success state with loaded data
       emit(state.copyWith(
         userInfo: userInfo,
@@ -54,9 +53,6 @@ class MyInfoBloc extends HydratedBloc<MyInfoEvent, MyInfoState> {
     } catch (e) {
       // Handle any errors during data loading
       emit(state.copyWith(loadingState: LoadingState.err));
-    } finally {
-      // Reset loading state to initial after operation completes
-      emit(state.copyWith(loadingState: LoadingState.initial));
     }
   }
 
