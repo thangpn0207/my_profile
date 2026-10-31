@@ -34,12 +34,26 @@ class RevealOnScroll extends StatefulWidget {
 class _RevealOnScrollState extends State<RevealOnScroll> {
   bool _revealed = false;
   ScrollPosition? _position;
+  ScrollableState? _scrollable;
+
+  /// Nearest enclosing vertical Scrollable that can actually scroll (skips
+  /// shrink-wrapped, non-scrollable inner lists such as the project grid).
+  ScrollableState? _findScrollable() {
+    var s = Scrollable.maybeOf(context);
+    while (s != null &&
+        (s.position.physics is NeverScrollableScrollPhysics ||
+            axisDirectionToAxis(s.axisDirection) != Axis.vertical)) {
+      s = Scrollable.maybeOf(s.context);
+    }
+    return s;
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_revealed) return;
-    final position = Scrollable.maybeOf(context)?.position;
+    _scrollable = _findScrollable();
+    final position = _scrollable?.position;
     if (position == null || MediaQuery.disableAnimationsOf(context)) {
       _revealed = true;
       return;
@@ -54,8 +68,7 @@ class _RevealOnScrollState extends State<RevealOnScroll> {
   void _check() {
     if (!mounted || _revealed) return;
     final box = context.findRenderObject() as RenderBox?;
-    final viewport =
-        Scrollable.of(context).context.findRenderObject() as RenderBox?;
+    final viewport = _scrollable?.context.findRenderObject() as RenderBox?;
     if (box == null || viewport == null || !box.hasSize || !viewport.hasSize) {
       return;
     }

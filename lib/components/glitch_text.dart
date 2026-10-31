@@ -34,10 +34,13 @@ class _GlitchTextState extends State<GlitchText>
     super.dispose();
   }
 
-  Widget _layer(Color? color, Offset offset) => Transform.translate(
-        offset: offset,
-        child: Text(widget.text,
-            style: widget.style.copyWith(color: color!.withValues(alpha: 0.7))),
+  Widget _layer(Color? color, Offset offset) => ExcludeSemantics(
+        child: Transform.translate(
+          offset: offset,
+          child: Text(widget.text,
+              style:
+                  widget.style.copyWith(color: color!.withValues(alpha: 0.7))),
+        ),
       );
 
   @override
