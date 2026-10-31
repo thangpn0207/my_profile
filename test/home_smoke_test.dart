@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:my_profile/components/matrix_rain_overlay.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -53,6 +55,37 @@ void main() {
 
     expect(find.byType(TerminalPanel), findsOneWidget);
     expect(t.takeException(), isNull);
+
+    Future<void> konami() async {
+      for (final k in [
+        LogicalKeyboardKey.arrowUp,
+        LogicalKeyboardKey.arrowUp,
+        LogicalKeyboardKey.arrowDown,
+        LogicalKeyboardKey.arrowDown,
+        LogicalKeyboardKey.arrowLeft,
+        LogicalKeyboardKey.arrowRight,
+        LogicalKeyboardKey.arrowLeft,
+        LogicalKeyboardKey.arrowRight,
+        LogicalKeyboardKey.keyB,
+        LogicalKeyboardKey.keyA,
+      ]) {
+        await t.sendKeyEvent(k);
+      }
+      await t.pump();
+    }
+
+    // Typing in the terminal must not trigger the easter egg.
+    await t.tap(find.byType(TextField));
+    await t.pump();
+    await konami();
+    expect(find.byType(MatrixRainOverlay), findsNothing);
+
+    FocusManager.instance.primaryFocus?.unfocus();
+    await t.pump();
+    await konami();
+    expect(find.byType(MatrixRainOverlay), findsOneWidget);
+    await t.pump(const Duration(seconds: 6));
+    expect(find.byType(MatrixRainOverlay), findsNothing);
 
     await t.pumpWidget(const SizedBox());
     await t.pump(const Duration(seconds: 6));
