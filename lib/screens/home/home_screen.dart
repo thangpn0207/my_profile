@@ -5,6 +5,7 @@ import 'package:my_profile/core/sections.dart';
 import 'package:my_profile/screens/main/main_screen.dart';
 
 import '../../core/app_dimensions.dart';
+import '../../components/terminal/terminal_panel.dart';
 import 'components/highlights.dart';
 import 'components/home_banner.dart';
 import 'components/my_projects.dart';
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: MainScreen(
         children: [
           KeyedSubtree(key: Section.home.key, child: const HomeBanner()),
+          KeyedSubtree(key: Section.terminal.key, child: const TerminalPanel()),
           KeyedSubtree(key: Section.stats.key, child: const HighLightsInfo()),
           SizedBox(height: AppDimensions.paddingM),
           KeyedSubtree(key: Section.projects.key, child: const MyProjects()),
