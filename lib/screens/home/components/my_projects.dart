@@ -6,6 +6,8 @@ import 'package:my_profile/bloc/my_info_bloc.dart';
 
 import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
+import 'package:my_profile/components/glitch_text.dart';
+import 'package:my_profile/components/reveal_on_scroll.dart';
 import 'project_card.dart';
 
 class MyProjects extends StatelessWidget {
@@ -41,7 +43,7 @@ class MyProjects extends StatelessWidget {
                 size: 24,
               ),
               const SizedBox(width: 12),
-              Text(
+              GlitchText(
                 "PROJECT_LOGS",
                 style: GoogleFonts.shareTechMono(
                   color: Colors.white,
@@ -167,10 +169,13 @@ class _ProjectsGridViewState extends State<ProjectsGridView>
                 crossAxisSpacing: AppDimensions.paddingM,
                 mainAxisSpacing: AppDimensions.paddingM,
               ),
-              itemBuilder: (context, index) => ProjectCard(
-                project: displayProjects[index],
-                allProjects: displayProjects,
-                index: index,
+              itemBuilder: (context, index) => RevealOnScroll(
+                delay: Duration(milliseconds: index * 60),
+                child: ProjectCard(
+                  project: displayProjects[index],
+                  allProjects: displayProjects,
+                  index: index,
+                ),
               ),
             ),
             if (hasMoreProjects) ...[

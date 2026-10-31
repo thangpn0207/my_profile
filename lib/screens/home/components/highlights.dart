@@ -6,6 +6,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:my_profile/bloc/my_info_bloc.dart';
 import 'package:my_profile/components/animated_counter.dart';
 import 'package:my_profile/components/glass_container.dart';
+import 'package:my_profile/components/reveal_on_scroll.dart';
 import 'package:my_profile/core/app_colors.dart';
 import 'package:my_profile/core/sections.dart';
 import 'package:my_profile/utils/string_util.dart';
@@ -410,114 +411,116 @@ class HighLightsInfo extends StatelessWidget {
 
         return Padding(
           padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
-          child: ResponsiveBreakpoints.of(context).isMobile
-              ? Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: HighLight(
-                            counter: AnimatedCounter(
-                              value: userInfo.exp.formatStringToExp(),
-                              text: "+",
+          child: RevealOnScroll(
+            child: ResponsiveBreakpoints.of(context).isMobile
+                ? Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: HighLight(
+                              counter: AnimatedCounter(
+                                value: userInfo.exp.formatStringToExp(),
+                                text: "+",
+                              ),
+                              label: "Years exp",
+                              onTap: yearsExpTap,
                             ),
-                            label: "Years exp",
-                            onTap: yearsExpTap,
                           ),
-                        ),
-                        SizedBox(width: AppDimensions.paddingM),
-                        Expanded(
-                          child: HighLight(
-                            counter: const AnimatedCounter(
-                              value: 2,
-                              text: "",
+                          SizedBox(width: AppDimensions.paddingM),
+                          Expanded(
+                            child: HighLight(
+                              counter: const AnimatedCounter(
+                                value: 2,
+                                text: "",
+                              ),
+                              label: "Languages",
+                              onTap: () => _showLanguagesDialog(context),
                             ),
-                            label: "Languages",
-                            onTap: () => _showLanguagesDialog(context),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: AppDimensions.paddingM),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: HighLight(
-                            counter: AnimatedCounter(
-                              value: project.length,
-                              text: "+",
+                        ],
+                      ),
+                      SizedBox(height: AppDimensions.paddingM),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: HighLight(
+                              counter: AnimatedCounter(
+                                value: project.length,
+                                text: "+",
+                              ),
+                              label: "Projects",
+                              onTap: projectsTap,
                             ),
-                            label: "Projects",
-                            onTap: projectsTap,
                           ),
-                        ),
-                        SizedBox(width: AppDimensions.paddingM),
-                        Expanded(
-                          child: HighLight(
-                            counter: AnimatedCounter(
-                              value: userInfo.coding?.length ?? 0,
-                              text: "",
+                          SizedBox(width: AppDimensions.paddingM),
+                          Expanded(
+                            child: HighLight(
+                              counter: AnimatedCounter(
+                                value: userInfo.coding?.length ?? 0,
+                                text: "",
+                              ),
+                              label: "Languages Code",
+                              onTap: () =>
+                                  _showSkillsDialog(context, userInfo.coding),
                             ),
-                            label: "Languages Code",
-                            onTap: () =>
-                                _showSkillsDialog(context, userInfo.coding),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: HighLight(
-                        counter: AnimatedCounter(
-                          value: userInfo.exp.formatStringToExp(),
-                          text: "+",
-                        ),
-                        label: "Years Exp",
-                        onTap: yearsExpTap,
+                        ],
                       ),
-                    ),
-                    SizedBox(width: AppDimensions.paddingM),
-                    Expanded(
-                      child: HighLight(
-                        counter: const AnimatedCounter(
-                          value: 2,
-                          text: "",
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: HighLight(
+                          counter: AnimatedCounter(
+                            value: userInfo.exp.formatStringToExp(),
+                            text: "+",
+                          ),
+                          label: "Years Exp",
+                          onTap: yearsExpTap,
                         ),
-                        label: "Languages",
-                        onTap: () => _showLanguagesDialog(context),
                       ),
-                    ),
-                    SizedBox(width: AppDimensions.paddingM),
-                    Expanded(
-                      child: HighLight(
-                        counter: AnimatedCounter(
-                          value: project.length,
-                          text: "+",
+                      SizedBox(width: AppDimensions.paddingM),
+                      Expanded(
+                        child: HighLight(
+                          counter: const AnimatedCounter(
+                            value: 2,
+                            text: "",
+                          ),
+                          label: "Languages",
+                          onTap: () => _showLanguagesDialog(context),
                         ),
-                        label: "Projects",
-                        onTap: projectsTap,
                       ),
-                    ),
-                    SizedBox(width: AppDimensions.paddingM),
-                    Expanded(
-                      child: HighLight(
-                        counter: AnimatedCounter(
-                          value: userInfo.coding?.length ?? 0,
-                          text: "",
+                      SizedBox(width: AppDimensions.paddingM),
+                      Expanded(
+                        child: HighLight(
+                          counter: AnimatedCounter(
+                            value: project.length,
+                            text: "+",
+                          ),
+                          label: "Projects",
+                          onTap: projectsTap,
                         ),
-                        label: "Languages Code",
-                        onTap: () =>
-                            _showSkillsDialog(context, userInfo.coding),
                       ),
-                    ),
-                  ],
-                ),
+                      SizedBox(width: AppDimensions.paddingM),
+                      Expanded(
+                        child: HighLight(
+                          counter: AnimatedCounter(
+                            value: userInfo.coding?.length ?? 0,
+                            text: "",
+                          ),
+                          label: "Languages Code",
+                          onTap: () =>
+                              _showSkillsDialog(context, userInfo.coding),
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
         );
       },
     );

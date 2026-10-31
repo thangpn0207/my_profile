@@ -255,10 +255,7 @@ class _MainScreenState extends State<MainScreen> {
                   ...widget.children.map((child) => Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: child,
-                      )
-                          .animate()
-                          .fadeIn(duration: 600.ms)
-                          .slideY(begin: 0.05, end: 0)),
+                      )),
                   const SizedBox(height: 60),
                   _buildFooter(),
                 ],
