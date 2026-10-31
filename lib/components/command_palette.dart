@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../core/app_colors.dart';
+import '../core/open_url.dart';
 import '../core/sections.dart';
 import 'terminal/terminal_commands.dart';
 
@@ -12,30 +12,16 @@ class _Entry {
   final Future<void> Function() run;
 }
 
-// Duplicate of terminal_panel.dart's private _open (resolves relative assets).
-Future<void> _open(String url) async {
-  var s = url;
-  if (!s.startsWith('http') &&
-      !s.startsWith('mailto') &&
-      !s.startsWith('tel')) {
-    final base = Uri.base.toString().split('?').first.split('#').first;
-    s = base.endsWith('/') ? '$base$s' : '$base/$s';
-  }
-  try {
-    await launchUrl(Uri.parse(s));
-  } catch (_) {}
-}
-
 Future<void> showCommandPalette(BuildContext context, TerminalContext ctx) {
   final entries = [
     for (final s in Section.values) _Entry(s.label, () => scrollToSection(s)),
     _Entry('cv', () async {
       final url = runCommand('cv', ctx).openUrl;
-      if (url != null) await _open(url);
+      if (url != null) await openUrl(url);
     }),
     _Entry('contact', () async {
-      final m = ctx.user?.mailto;
-      if (m != null && m.isNotEmpty) await _open('mailto:$m');
+      final url = runCommand('sudo hire-me', ctx).openUrl;
+      if (url != null) await openUrl(url);
     }),
   ];
   return showDialog<void>(

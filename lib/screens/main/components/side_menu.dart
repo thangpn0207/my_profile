@@ -7,7 +7,7 @@ import 'package:my_profile/bloc/my_info_bloc.dart';
 import 'package:my_profile/core/app_colors.dart';
 import 'package:my_profile/models/user_info.dart';
 import 'package:my_profile/utils/string_util.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:my_profile/core/open_url.dart';
 import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
 import 'area_info_text.dart';
@@ -103,7 +103,7 @@ class SideMenu extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         child: TextButton(
-          onPressed: () => cvUrl.isNotEmpty ? _launchUrl(cvUrl) : null,
+          onPressed: () => cvUrl.isNotEmpty ? openUrl(cvUrl) : null,
           style: TextButton.styleFrom(padding: const EdgeInsets.all(16)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +130,7 @@ class SideMenu extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildSocialIcon(
-          onPressed: () => _launchUrl(userInfo?.linkinURL ?? ''),
+          onPressed: () => openUrl(userInfo?.linkinURL ?? ''),
           icon: SvgPicture.asset(
             "assets/icons/linkedin.svg",
             width: 20,
@@ -138,15 +138,15 @@ class SideMenu extends StatelessWidget {
           ),
         ),
         _buildSocialIcon(
-          onPressed: () => _launchUrl(userInfo?.facebookURL ?? ''),
+          onPressed: () => openUrl(userInfo?.facebookURL ?? ''),
           icon: LineIcon.facebookSquare(color: AppColors.textSecondary, size: 24),
         ),
         _buildSocialIcon(
-          onPressed: () => _launchUrl("mailto:${userInfo?.mailto ?? ''}"),
+          onPressed: () => openUrl("mailto:${userInfo?.mailto ?? ''}"),
           icon: const Icon(Icons.email_outlined, color: AppColors.textSecondary, size: 22),
         ),
         _buildSocialIcon(
-          onPressed: () => _launchUrl(userInfo?.githubURL ?? ""),
+          onPressed: () => openUrl(userInfo?.githubURL ?? ""),
           icon: SvgPicture.asset(
             "assets/icons/github.svg",
             width: 20,
@@ -164,31 +164,5 @@ class SideMenu extends StatelessWidget {
       hoverColor: AppColors.primary.withValues(alpha: 0.1),
       splashRadius: 20,
     );
-  }
-
-  Future<void> _launchUrl(String url) async {
-    try {
-      if (url.isEmpty) return;
-
-      Uri uri;
-      if (!url.startsWith('http') && !url.startsWith('mailto') && !url.startsWith('tel')) {
-        // Resolve relative paths dynamically on the web against the host's base URL (Uri.base)
-        final String basePath = Uri.base.toString();
-        final String cleanedBase = basePath.split('?').first.split('#').first;
-        if (cleanedBase.endsWith('/')) {
-          uri = Uri.parse('$cleanedBase$url');
-        } else {
-          uri = Uri.parse('$cleanedBase/$url');
-        }
-      } else {
-        uri = Uri.parse(url);
-      }
-
-      if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-        throw Exception('Could not launch $uri');
-      }
-    } catch (e) {
-      debugPrint('Error launching URL: $e');
-    }
   }
 }
