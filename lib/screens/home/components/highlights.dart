@@ -7,7 +7,7 @@ import 'package:my_profile/bloc/my_info_bloc.dart';
 import 'package:my_profile/components/animated_counter.dart';
 import 'package:my_profile/components/glass_container.dart';
 import 'package:my_profile/core/app_colors.dart';
-import 'package:my_profile/core/project_keys.dart';
+import 'package:my_profile/core/sections.dart';
 import 'package:my_profile/utils/string_util.dart';
 
 import '../../../core/app_dimensions.dart';
@@ -406,15 +406,7 @@ class HighLightsInfo extends StatelessWidget {
           _showExperienceTimelineDialog(context, userInfo.exp);
         }
 
-        void projectsTap() {
-          if (ProjectKeys.projectsKey.currentContext != null) {
-            Scrollable.ensureVisible(
-              ProjectKeys.projectsKey.currentContext!,
-              duration: const Duration(milliseconds: 800),
-              curve: Curves.easeInOutCubic,
-            );
-          }
-        }
+        void projectsTap() => scrollToSection(Section.projects);
 
         return Padding(
           padding: EdgeInsets.symmetric(vertical: AppDimensions.paddingM),
