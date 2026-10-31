@@ -63,5 +63,6 @@ class MyInfoBloc extends HydratedBloc<MyInfoEvent, MyInfoState> {
       _$MyInfoStateFromJson(json);
 
   @override
-  Map<String, dynamic>? toJson(MyInfoState state) => _$MyInfoStateToJson(state);
+  Map<String, dynamic>? toJson(MyInfoState state) =>
+      _$MyInfoStateToJson(state)..remove('loadingState');
 }

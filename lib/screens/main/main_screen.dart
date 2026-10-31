@@ -49,7 +49,8 @@ class _MainScreenState extends State<MainScreen> {
     _konami = konamiAdvance(_konami, e.logicalKey);
     if (_konami == 10) {
       _konami = 0;
-      if (!MediaQuery.disableAnimationsOf(context)) {
+      if (ResponsiveBreakpoints.of(context).isDesktop &&
+          !MediaQuery.disableAnimationsOf(context)) {
         final entry = OverlayEntry(
           builder: (_) => MatrixRainOverlay(onDone: _removeRain),
         );
@@ -61,7 +62,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _removeRain() {
-    _rain?.remove();
+    _rain
+      ?..remove()
+      ..dispose();
     _rain = null;
   }
 
@@ -154,7 +157,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildChildByState(BuildContext context, MyInfoState state) {
-    if (state.loadingState == LoadingState.loading) {
+    if (state.loadingState == LoadingState.loading && state.userInfo == null) {
       return _buildLoadingOverlay(key: const ValueKey('loading'));
     }
     if (state.loadingState == LoadingState.err) {
