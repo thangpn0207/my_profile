@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -14,6 +15,7 @@ import 'utils/web_utils.dart';
 void main() async {
   setUrlStrategy(const HashUrlStrategy());
   WidgetsFlutterBinding.ensureInitialized();
+  GoogleFonts.config.allowRuntimeFetching = false;
 
   // Initialize HydratedBloc storage
   HydratedBloc.storage = await HydratedStorage.build(

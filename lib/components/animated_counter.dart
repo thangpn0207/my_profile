@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_profile/core/app_dimensions.dart';
 import 'package:my_profile/core/app_colors.dart';
+import 'package:my_profile/components/reveal_on_scroll.dart';
 
 class AnimatedCounter extends StatelessWidget {
   const AnimatedCounter({
@@ -14,8 +15,9 @@ class AnimatedCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final revealed = RevealScope.maybeOf(context) ?? true;
     return TweenAnimationBuilder(
-      tween: IntTween(begin: 0, end: value),
+      tween: IntTween(begin: 0, end: revealed ? value : 0),
       duration: Duration(milliseconds: AppDimensions.animationSlowHigh),
       builder: (context, animatedValue, child) {
         return TweenAnimationBuilder<Color?>(
