@@ -13,7 +13,7 @@ import 'core/app_theme.dart';
 import 'utils/web_utils.dart';
 
 void main() async {
-  setUrlStrategy(const HashUrlStrategy());
+  usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = false;
 

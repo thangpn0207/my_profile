@@ -280,8 +280,8 @@ class _MainScreenState extends State<MainScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (isDesktop)
-            Expanded(
-              flex: 3,
+            SizedBox(
+              width: (MediaQuery.sizeOf(context).width * 0.25).clamp(300, 380),
               child: GlassContainer(
                 margin: const EdgeInsets.all(20),
                 borderRadius: 12.0,
@@ -299,23 +299,30 @@ class _MainScreenState extends State<MainScreen> {
                   .fadeIn(),
             ),
           Expanded(
-            flex: 9,
-            child: SingleChildScrollView(
+            child: Scrollbar(
               controller: _scrollController,
-              physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                horizontal: isDesktop ? 20 : 16,
-                vertical: isDesktop ? 20 : 10,
-              ),
-              child: Column(
-                children: [
-                  ...widget.children.map((child) => Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: child,
-                      )),
-                  const SizedBox(height: 60),
-                  _buildFooter(),
-                ],
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                padding: EdgeInsets.symmetric(
+                  horizontal: isDesktop ? 20 : 16,
+                  vertical: isDesktop ? 20 : 10,
+                ),
+                child: Center(
+                  // Keep line length readable on wide monitors.
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1200),
+                    child: Column(
+                      children: [
+                        ...widget.children.map((child) => Padding(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: child,
+                            )),
+                        const SizedBox(height: 60),
+                        _buildFooter(),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
