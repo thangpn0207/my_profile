@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../screens/home/home_screen.dart';
+import 'sections.dart';
 
 /// Centralized routing configuration for the application
 class AppRouter {
@@ -19,6 +20,12 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state) {
           return const HomeScreen();
         },
+      ),
+      GoRoute(
+        path: '/:section',
+        builder: (BuildContext context, GoRouterState state) => HomeScreen(
+          initialSection: Section.tryParse(state.pathParameters['section']),
+        ),
       ),
       // Add more routes here as your app grows
       // Example:

@@ -10,17 +10,10 @@ import 'package:my_profile/components/glass_container.dart';
 import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
 
-class HomeBanner extends StatefulWidget {
+class HomeBanner extends StatelessWidget {
   const HomeBanner({
     super.key,
   });
-
-  @override
-  State<HomeBanner> createState() => _HomeBannerState();
-}
-
-class _HomeBannerState extends State<HomeBanner> {
-  double _scrollOffset = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,64 +24,56 @@ class _HomeBannerState extends State<HomeBanner> {
       builder: (context, state) {
         final userInfo = state.userInfo;
         final name = userInfo?.name?.toUpperCase() ?? "PHẠM NGỌC THẮNG";
-        final role = userInfo?.role?.toUpperCase() ?? "SENIOR_FLUTTER_ENGINEER // WINDOWS_SMARTBOARD";
+        final role = userInfo?.role?.toUpperCase() ??
+            "SENIOR_FLUTTER_ENGINEER // WINDOWS_SMARTBOARD";
 
-        return NotificationListener<ScrollNotification>(
-          onNotification: (notification) {
-            if (notification is ScrollUpdateNotification) {
-              setState(() {
-                _scrollOffset = notification.metrics.pixels;
-              });
-            }
-            return true;
-          },
-          child: LayoutBuilder(builder: (context, constraints) {
-            return GlassContainer(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 16 : AppDimensions.paddingL,
-                vertical: isMobile ? 40 : AppDimensions.paddingXXL,
-              ),
-              borderRadius: 12.0,
-              opacity: 0.3,
-              boxBorder: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
-              child: Stack(
-                children: [
-                  // Parallax Background Icon
-                  Positioned(
-                    right: -50,
-                    top: -50 + (_scrollOffset * 0.2),
-                    child: Opacity(
-                      opacity: 0.05,
-                      child: Icon(Icons.code, size: 300, color: AppColors.primary),
-                    ),
+        return LayoutBuilder(builder: (context, constraints) {
+          return GlassContainer(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 16 : AppDimensions.paddingL,
+              vertical: isMobile ? 40 : AppDimensions.paddingXXL,
+            ),
+            borderRadius: 12.0,
+            opacity: 0.3,
+            boxBorder:
+                Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
+            child: Stack(
+              children: [
+                // Decorative background icon
+                Positioned(
+                  right: -50,
+                  top: -50,
+                  child: Opacity(
+                    opacity: 0.05,
+                    child:
+                        Icon(Icons.code, size: 300, color: AppColors.primary),
                   ),
+                ),
 
-                  if (isMobile)
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildTechAvatar(70),
-                        const SizedBox(height: 30),
-                        _buildIdentityInfo(context, true, name, role),
-                      ],
-                    )
-                  else
-                    Row(
-                      children: [
-                        Transform.translate(
-                          offset: Offset(0, _scrollOffset * 0.1),
-                          child: _buildTechAvatar(isTablet ? 90 : 120),
-                        ),
-                        SizedBox(width: isTablet ? 30 : 60),
-                        Expanded(child: _buildIdentityInfo(context, false, name, role)),
-                      ],
-                    ),
-                ],
-              ),
-            ).animate().fadeIn(duration: 800.ms);
-          }),
-        );
+                if (isMobile)
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildTechAvatar(70),
+                      const SizedBox(height: 30),
+                      _buildIdentityInfo(context, true, name, role),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      _buildTechAvatar(isTablet ? 90 : 120),
+                      SizedBox(width: isTablet ? 30 : 60),
+                      Expanded(
+                          child:
+                              _buildIdentityInfo(context, false, name, role)),
+                    ],
+                  ),
+              ],
+            ),
+          ).animate().fadeIn(duration: 800.ms);
+        });
       },
     );
   }
@@ -212,7 +197,8 @@ class _HomeBannerState extends State<HomeBanner> {
     );
   }
 
-  Widget _buildIdentityInfo(BuildContext context, bool isMobile, String name, String role) {
+  Widget _buildIdentityInfo(
+      BuildContext context, bool isMobile, String name, String role) {
     return Column(
       crossAxisAlignment:
           isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,

@@ -5,6 +5,8 @@ import 'package:my_profile/bloc/my_info_bloc.dart';
 
 import '../../../core/app_colors.dart';
 import '../../../core/app_dimensions.dart';
+import 'package:my_profile/components/glitch_text.dart';
+import 'package:my_profile/components/reveal_on_scroll.dart';
 import 'recommendation_card.dart';
 
 class AboutMe extends StatelessWidget {
@@ -14,7 +16,8 @@ class AboutMe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return RevealOnScroll(
+        child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
@@ -40,7 +43,7 @@ class AboutMe extends StatelessWidget {
                 size: 24,
               ),
               const SizedBox(width: 12),
-              Text(
+              GlitchText(
                 "CORE_IDENTITY",
                 style: GoogleFonts.shareTechMono(
                   color: Colors.white,
@@ -69,6 +72,6 @@ class AboutMe extends StatelessWidget {
           },
         ),
       ],
-    );
+    ));
   }
 }

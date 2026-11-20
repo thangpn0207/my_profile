@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:my_profile/core/app_colors.dart';
 
@@ -32,17 +31,17 @@ class GlassContainer extends StatelessWidget {
       margin: margin,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-          child: Container(
-            padding: padding,
-            decoration: BoxDecoration(
-              color: AppColors.surface.withValues(alpha: opacity),
-              borderRadius: BorderRadius.circular(borderRadius),
-              border: boxBorder ?? Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
-            ),
-            child: child,
+        // No BackdropFilter: full-screen blur is very slow on web, so use a
+        // more opaque surface instead.
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            color: AppColors.surface.withValues(alpha: opacity.clamp(0.6, 1.0)),
+            borderRadius: BorderRadius.circular(borderRadius),
+            border: boxBorder ??
+                Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
           ),
+          child: child,
         ),
       ),
     );
