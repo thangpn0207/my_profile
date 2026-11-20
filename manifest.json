@@ -1,11 +1,11 @@
 {
-    "name": "my_profile",
-    "short_name": "my_profile",
+    "name": "Pham Ngoc Thang | Senior Flutter Engineer",
+    "short_name": "Thang Pham",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0B0B0F",
+    "theme_color": "#0B0B0F",
+    "description": "Senior Flutter Engineer profile and portfolio.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
